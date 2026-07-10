@@ -1,36 +1,34 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# La sainteté de la famille — Pioche une carte
 
-## Getting Started
+Expérience web pour la fête des saints Louis et Zélie Martin :
+on ouvre le lien, on lit le message d'accueil, on touche le paquet,
+et on reçoit une carte — une **parole** à méditer (recto) et un
+**défi spirituel** à vivre (verso), avec un retournement 3D de la carte.
 
-First, run the development server:
+- 30 cartes (versets, citations des papes, CEC, sainte Thérèse…)
+- Pioche aléatoire **sans doublon** : les cartes déjà reçues sont mémorisées
+  sur l'appareil (localStorage) ; après les 30, le paquet est remélangé.
+- Mobile-first (pensé pour un lien partagé sur WhatsApp), fonctionne aussi sur desktop.
+- Next.js (App Router) + Framer Motion, rendu 100 % statique.
+
+## Développement
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
+npm run dev        # http://localhost:3000
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Déploiement
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+npm run build      # site statique, prêt pour Vercel / Netlify
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Le plus simple : pousser le repo sur GitHub puis l'importer sur https://vercel.com —
+aucun réglage nécessaire.
 
-## Learn More
+## Modifier les cartes
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Tout le contenu est dans [`data/cards.ts`](data/cards.ts) :
+`quote` (recto), `reference`, `challenge` (verso), `icon`
+(`flame`, `house`, `heart`, `dove`, `book`, `cross`).
