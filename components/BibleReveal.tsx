@@ -40,6 +40,7 @@ type Step =
   | "zoom"
   | "pen"
   | "focus"
+  | "present"
   | "done";
 
 interface LineRect {
@@ -471,7 +472,8 @@ export default function BibleReveal({
       const camEl = camRef.current;
       if (!landing.target || !span || !book || !camEl) {
         setStep("focus");
-        later(() => setStep("done"), 900);
+        later(() => setStep("present"), 550);
+        later(() => setStep("done"), 1250);
         return;
       }
       const br = book.getBoundingClientRect();
@@ -483,7 +485,8 @@ export default function BibleReveal({
       const pageBottom = br.top + PAGE_H * scale;
       if (!rects.length || rects[rects.length - 1].bottom > pageBottom + 2) {
         setStep("focus");
-        later(() => setStep("done"), 900);
+        later(() => setStep("present"), 550);
+        later(() => setStep("done"), 1250);
         return;
       }
       const ls = rects.map((r) => ({
@@ -514,8 +517,10 @@ export default function BibleReveal({
   /* feutre terminé → flou du reste → actions */
   useEffect(() => {
     if (step !== "pen" || !pen) return;
-    later(() => setStep("focus"), pen.total * 1000 + 350);
-    later(() => setStep("done"), pen.total * 1000 + 1100);
+    // on laisse le verset souligné bien visible dans la Bible avant qu'il sorte
+    later(() => setStep("focus"), pen.total * 1000 + 300);
+    later(() => setStep("present"), pen.total * 1000 + 1500);
+    later(() => setStep("done"), pen.total * 1000 + 2100);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [step, pen]);
 
@@ -536,7 +541,7 @@ export default function BibleReveal({
 
   const opened = step !== "closed";
   const flying = step !== "closed" && step !== "opening";
-  const focused = step === "focus" || step === "done";
+  const focused = step === "focus" || step === "present" || step === "done";
   const holyCardMode = !landing.target;
 
   /* variables de caméra selon l'étape */
@@ -774,7 +779,7 @@ export default function BibleReveal({
                 )}
 
                 {/* traits laissés par le feutre, conservés après son passage */}
-                {(step === "focus" || step === "done") &&
+                {(step === "focus" || step === "present" || step === "done") &&
                   lines?.map((r, i) => (
                     <div
                       key={i}
@@ -788,41 +793,40 @@ export default function BibleReveal({
                     />
                   ))}
 
-                {/* parole non biblique : source affichée en haut, image pieuse au centre */}
-                <AnimatePresence>
-                  {holyCardMode && focused && card.reference && (
-                    <motion.div
-                      className="holy-top"
-                      initial={{ opacity: 0, y: -14 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.7, ease: easeOut, delay: 0.15 }}
-                    >
-                      <span className="holy-top-label">Source</span>
-                      <span className="holy-top-ref">{card.reference}</span>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-                <AnimatePresence>
-                  {holyCardMode && focused && (
-                    <motion.div
-                      className="holy-card"
-                      initial={{ opacity: 0, y: 60, rotate: -7, scale: 0.85 }}
-                      animate={{ opacity: 1, y: 0, rotate: -2.5, scale: 1 }}
-                      transition={{ duration: 0.9, ease: easeOut, delay: 0.3 }}
-                    >
-                      <span className="holy-card-icon">
-                        <CardIconGlyph icon={card.icon} size={26} />
-                      </span>
-                      <p className="holy-card-quote">«&nbsp;{card.quote}&nbsp;»</p>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
               </div>
             </motion.div>
           </div>
         </motion.div>
       </div>
       </div>
+
+      {/* le verset « sort » de la Bible et s'affiche en grand, bien lisible */}
+      <AnimatePresence>
+        {(step === "present" || step === "done") && (
+          <motion.div
+            className="verse-present"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.4 }}
+          >
+            <motion.div
+              className="verse-card"
+              initial={{ opacity: 0, scale: 0.58, y: 10 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              transition={{ duration: 0.75, ease: easeOut }}
+            >
+              <span className="verse-card-icon">
+                <CardIconGlyph icon={card.icon} size={30} />
+              </span>
+              <p className="verse-card-quote">«&nbsp;{card.quote}&nbsp;»</p>
+              {card.reference && (
+                <p className="verse-card-ref">{card.reference}</p>
+              )}
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* référence + partage + actions */}
       <AnimatePresence>
@@ -835,9 +839,6 @@ export default function BibleReveal({
             transition={{ duration: 0.7, ease: easeOut }}
           >
             <div className="ref-row">
-              {!holyCardMode && card.reference && (
-                <p className="ref-chip">{card.reference}</p>
-              )}
               <button
                 type="button"
                 className={`icon-btn${copied ? " icon-btn--ok" : ""}`}
@@ -846,6 +847,7 @@ export default function BibleReveal({
                 title="Copier"
               >
                 {copied ? <CheckIcon size={19} /> : <CopyIcon size={19} />}
+                <span className="icon-btn-label">{copied ? "Copié" : "Copier"}</span>
               </button>
               <button
                 type="button"
@@ -855,6 +857,7 @@ export default function BibleReveal({
                 title="Partager"
               >
                 <ShareIcon size={19} />
+                <span className="icon-btn-label">Partager</span>
               </button>
             </div>
             <div className="card-actions">
