@@ -155,14 +155,127 @@ button {
   transform: translateY(-1px);
 }
 
-/* ---------- pioche ---------- */
+/* ---------- attente : Bible fermée ---------- */
 
-.deck-wrap {
+.bible-wait {
   position: relative;
-  width: min(64vw, 250px, calc(48dvh * 0.66));
-  aspect-ratio: 0.66;
   cursor: pointer;
   transform-style: preserve-3d;
+  perspective: 900px;
+}
+
+.bible-closed {
+  position: relative;
+  width: 210px;
+  height: 300px;
+  transform-style: preserve-3d;
+  transform: rotateX(16deg) rotateZ(-2deg);
+}
+
+/* tranche de pages (épaisseur) sous la couverture */
+.bible-closed-block {
+  position: absolute;
+  left: 8px;
+  top: 6px;
+  right: 2px;
+  bottom: -8px;
+  border-radius: 4px 10px 10px 4px;
+  background:
+    repeating-linear-gradient(
+      180deg,
+      #efe6cf 0px,
+      #efe6cf 1px,
+      #d8cba7 1.5px,
+      #efe6cf 2.5px
+    );
+  box-shadow:
+    inset -3px 0 6px rgba(120, 96, 60, 0.4),
+    2px 8px 22px -6px rgba(60, 40, 20, 0.4);
+}
+
+.bible-closed-cover {
+  position: absolute;
+  inset: 0;
+  border-radius: 5px 12px 12px 5px;
+  overflow: hidden;
+  box-shadow:
+    0 26px 50px -16px rgba(40, 8, 14, 0.6),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+.bible-closed-ribbon {
+  position: absolute;
+  top: 6px;
+  right: 40px;
+  width: 9px;
+  height: 116%;
+  background: linear-gradient(90deg, #7d1a27, #a62b38 45%, #8c1f2d);
+  box-shadow: -1px 0 3px rgba(0, 0, 0, 0.3);
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 50% 86%, 0 100%);
+}
+
+/* couverture cuir (partagée fermée / ouverte) */
+.b-cover-face {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  color: #d8bd72;
+  background:
+    radial-gradient(120% 100% at 30% 0%, #7a2130, #601722 55%, #3e0e17);
+  background-blend-mode: normal;
+}
+
+.b-cover-face::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  opacity: 0.5;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.7' numOctaves='2'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23g)'/%3E%3C/svg%3E");
+  mix-blend-mode: overlay;
+  pointer-events: none;
+}
+
+.b-cover-frame {
+  position: absolute;
+  inset: 12px;
+  border: 1.5px solid rgba(216, 189, 114, 0.55);
+  border-radius: 4px;
+}
+
+.b-cover-frame::before {
+  content: "";
+  position: absolute;
+  inset: 4px;
+  border: 0.75px solid rgba(216, 189, 114, 0.3);
+  border-radius: 3px;
+}
+
+.b-cover-cross {
+  width: 34px;
+  color: #d8bd72;
+  filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.4));
+  z-index: 1;
+}
+
+.b-cover-title {
+  font-family: var(--font-serif), Georgia, serif;
+  font-size: 1.05rem;
+  letter-spacing: 0.3em;
+  font-weight: 600;
+  color: #e4cb83;
+  z-index: 1;
+}
+
+.b-cover-sub {
+  font-size: 0.44rem;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: rgba(216, 189, 114, 0.75);
+  z-index: 1;
 }
 
 .hint {
@@ -185,80 +298,512 @@ button {
   color: rgba(122, 103, 92, 0.75);
 }
 
-/* ---------- dos de carte ---------- */
+/* ======================= Bible ouverte (révélation) ======================= */
 
-.card-back-design {
-  position: absolute;
-  inset: 0;
-  border-radius: 18px;
-  background:
-    radial-gradient(120% 90% at 50% 0%, #86293a, var(--wine) 45%, var(--wine-deep));
-  box-shadow:
-    0 24px 50px -18px rgba(60, 12, 20, 0.55),
-    inset 0 1px 0 rgba(255, 255, 255, 0.14);
-  display: grid;
-  place-items: center;
-  overflow: hidden;
-}
-
-.card-back-design::before {
-  content: "";
-  position: absolute;
-  inset: 10px;
-  border-radius: 12px;
-  border: 1px solid rgba(212, 185, 106, 0.55);
-}
-
-.card-back-design::after {
-  content: "";
-  position: absolute;
-  inset: 15px;
-  border-radius: 9px;
-  border: 1px solid rgba(212, 185, 106, 0.25);
-}
-
-/* ---------- carte révélée ---------- */
-
-.card-scene {
-  perspective: 1400px;
-  width: min(86vw, 340px, calc(58dvh * 0.64));
-  aspect-ratio: 0.64;
-}
-
-.card-3d {
+.bible-stage {
   position: relative;
-  width: 100%;
-  height: 100%;
-  transform-style: preserve-3d;
-  cursor: pointer;
+  transform-origin: center center;
+  perspective: 1700px;
+  perspective-origin: 50% 42%;
 }
 
-.card-face {
+.book-shadow3d {
+  position: absolute;
+  left: 50%;
+  bottom: 34px;
+  width: 300px;
+  height: 46px;
+  transform: translateX(-50%);
+  border-radius: 50%;
+  background: radial-gradient(50% 50% at 50% 50%, rgba(40, 24, 12, 0.5), transparent 72%);
+  filter: blur(7px);
+  pointer-events: none;
+}
+
+.bible-camera {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  margin-left: -220px; /* -SPREAD_W/2 */
+  margin-top: -165px; /* -PAGE_H/2 */
+  transform-style: preserve-3d;
+}
+
+.book3d {
+  position: relative;
+  transform-style: preserve-3d;
+}
+
+.book-inner {
   position: absolute;
   inset: 0;
-  border-radius: 20px;
+  transform-style: preserve-3d;
+}
+
+/* --- couvertures --- */
+
+.b-backcover {
+  position: absolute;
+  border-radius: 4px 9px 9px 4px;
+  background:
+    radial-gradient(120% 100% at 70% 0%, #7a2130, #571520 55%, #3a0d15);
+  box-shadow: 0 30px 55px -20px rgba(30, 6, 12, 0.6);
+  transform: translateZ(-2px);
+}
+
+.b-cover {
+  position: absolute;
+  transform-origin: left center;
+  transform-style: preserve-3d;
+  border-radius: 4px 9px 9px 4px;
+}
+
+.b-endpaper {
+  background:
+    radial-gradient(120% 100% at 50% 0%, #f3ead2, #e7dabb);
+  border-radius: 3px;
+}
+
+.b-endpaper::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  opacity: 0.4;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='90' height='90'%3E%3Cfilter id='m'%3E%3CfeTurbulence type='turbulence' baseFrequency='0.15' numOctaves='2'/%3E%3C/filter%3E%3Crect width='90' height='90' filter='url(%23m)' opacity='0.35'/%3E%3C/svg%3E");
+  mix-blend-mode: multiply;
+}
+
+/* --- tranches (épaisseur du bloc de pages) --- */
+
+.rim {
+  position: absolute;
+  top: 3px;
+  z-index: 80;
+  background:
+    repeating-linear-gradient(
+      180deg,
+      #f0e7d0 0px,
+      #f0e7d0 0.8px,
+      #cdbf9c 1.3px,
+      #f0e7d0 2px
+    );
+  pointer-events: none;
+}
+
+.rim--right {
+  left: 440px; /* SPREAD_W */
+  border-radius: 0 3px 3px 0;
+  box-shadow: inset -2px 0 5px rgba(120, 96, 58, 0.5);
+  transform: translateZ(-1px);
+}
+
+.rim--left {
+  right: 440px;
+  border-radius: 3px 0 0 3px;
+  box-shadow: inset 2px 0 5px rgba(120, 96, 58, 0.5);
+  transform: translateZ(-1px);
+}
+
+/* --- pages --- */
+
+.b-page,
+.flip-page {
+  position: absolute;
+  top: 0;
+  transform-style: preserve-3d;
+}
+
+.flip-page {
+  transform-origin: left center;
+  will-change: transform;
+}
+
+.b-page--base {
+  border-radius: 0 3px 3px 0;
+}
+
+.page-face {
+  position: absolute;
+  inset: 0;
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
+  overflow: hidden;
+  background:
+    linear-gradient(180deg, #fbf6e7, #f4ecd6);
+}
+
+.page-face--front {
+  border-radius: 0 3px 3px 0;
+  box-shadow: inset 1px 0 3px rgba(140, 116, 78, 0.16);
+}
+
+.page-face--back {
+  transform: rotateY(180deg);
+  border-radius: 3px 0 0 3px;
+  box-shadow: inset -1px 0 3px rgba(140, 116, 78, 0.16);
+}
+
+.b-page--base .pbody {
+  border-radius: 0 3px 3px 0;
+  background: linear-gradient(180deg, #fbf6e7, #f4ecd6);
+}
+
+/* léger jauni sur les bords + reflet de feuilletage */
+.page-face::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(120% 90% at 100% 50%, transparent 60%, rgba(150, 120, 70, 0.14));
+}
+
+.page-sheen {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(105deg, transparent 30%, rgba(255, 255, 255, 0.55) 50%, transparent 70%);
+  opacity: 0;
+}
+
+.page-shade-left {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(90deg, rgba(90, 70, 40, 0.14), transparent 22%);
+}
+
+/* --- texte imprimé --- */
+
+.pbody {
+  position: absolute;
+  inset: 0;
+  padding: 16px 15px 14px;
+  display: flex;
+  flex-direction: column;
+}
+
+.pbody--left {
+  padding-left: 17px;
+  padding-right: 14px;
+}
+
+.pbody--right {
+  padding-left: 14px;
+  padding-right: 17px;
+}
+
+.phead {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  font-family: var(--font-serif), Georgia, serif;
+  font-size: 5.6px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #9a8358;
+  margin-bottom: 6px;
+  padding-bottom: 3px;
+  border-bottom: 0.5px solid rgba(150, 120, 70, 0.3);
+}
+
+.phead > span {
+  flex: 1;
+  text-align: center;
+}
+
+.pfolio {
+  font-variant-numeric: tabular-nums;
+}
+
+.pcols {
+  flex: 1;
+  overflow: hidden;
+  color: #3a2f26;
+}
+
+.pverse {
+  font-family: var(--font-serif), Georgia, serif;
+  font-size: 6px;
+  line-height: 1.42;
+  text-align: justify;
+  hyphens: auto;
+  margin-bottom: 2.5px;
+  text-indent: 0;
+}
+
+.dropcap {
+  float: left;
+  font-family: var(--font-serif), Georgia, serif;
+  font-weight: 600;
+  font-size: 17px;
+  line-height: 0.82;
+  padding: 1px 3px 0 0;
+  color: var(--wine-ink);
+}
+
+.vnum {
+  font-size: 4px;
+  font-weight: 700;
+  color: var(--wine);
+  vertical-align: super;
+  line-height: 0;
+  margin-right: 0.3px;
+}
+
+.hl-target {
+  /* cible logique du surlignage : neutre visuellement, repérée par le JS */
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+}
+
+/* --- pli central + titre --- */
+
+.gutter-shade {
+  position: absolute;
+  left: 216px; /* PAGE_W - 4 */
+  top: 0;
+  width: 8px;
+  height: 330px; /* PAGE_H */
+  z-index: 105;
+  pointer-events: none;
+  background: linear-gradient(
+    90deg,
+    rgba(80, 60, 34, 0) 0%,
+    rgba(80, 60, 34, 0.22) 45%,
+    rgba(80, 60, 34, 0.28) 50%,
+    rgba(80, 60, 34, 0.22) 55%,
+    rgba(80, 60, 34, 0) 100%
+  );
+}
+
+.b-titlepage {
+  position: absolute;
+  inset: 0;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 30px 26px;
+  gap: 8px;
   text-align: center;
-  background:
-    radial-gradient(120% 100% at 50% 0%, #fffdf8, var(--card-face) 55%, #f6efdd);
-  box-shadow:
-    0 30px 60px -22px rgba(60, 40, 20, 0.4),
-    inset 0 0 0 1px rgba(169, 130, 47, 0.25);
 }
 
-.card-face::before {
+.b-titlepage-main {
+  font-family: var(--font-serif), Georgia, serif;
+  font-size: 14px;
+  letter-spacing: 0.28em;
+  color: var(--wine-ink);
+}
+
+.b-titlepage-sub {
+  font-family: var(--font-serif), Georgia, serif;
+  font-style: italic;
+  font-size: 7px;
+  letter-spacing: 0.1em;
+  color: #9a8358;
+}
+
+/* --- surlignage : voile, feutre, traits --- */
+
+.spread-overlay {
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: 150;
+  pointer-events: none;
+}
+
+.dim-veil {
+  position: absolute;
+  inset: 0;
+  background: rgba(24, 15, 8, 0.4);
+  backdrop-filter: blur(2.6px) saturate(0.82);
+  -webkit-backdrop-filter: blur(2.6px) saturate(0.82);
+}
+
+/* surlignage feutre : voile translucide qui laisse parfaitement lire l'encre */
+.hl-stroke {
+  position: absolute;
+  border-radius: 2.5px;
+  background: rgba(255, 209, 92, 0.32);
+  mix-blend-mode: multiply;
+}
+
+.pen-wrap {
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: 160;
+  will-change: transform;
+  filter: drop-shadow(-3px 6px 5px rgba(40, 25, 10, 0.35));
+}
+
+.pen-rot {
+  transform: translate(-21px, -131px) rotate(19deg);
+  transform-origin: 21px 131px;
+}
+
+/* --- source affichée en haut de la Bible (parole non biblique) --- */
+
+.holy-top {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 20px;
+  z-index: 172;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  text-align: center;
+  padding: 0 24px;
+}
+
+.holy-top-label {
+  font-size: 6px;
+  letter-spacing: 0.34em;
+  text-transform: uppercase;
+  color: var(--gold);
+  font-weight: 700;
+}
+
+.holy-top-ref {
+  font-family: var(--font-serif), Georgia, serif;
+  font-size: 12px;
+  line-height: 1.3;
+  color: var(--wine-ink);
+  max-width: 260px;
+  text-wrap: balance;
+}
+
+/* --- image pieuse (parole non biblique) --- */
+
+.holy-card {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 210px;
+  transform: translate(-50%, -50%);
+  z-index: 170;
+  padding: 20px 20px 18px;
+  border-radius: 4px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 9px;
+  text-align: center;
+  background:
+    radial-gradient(120% 100% at 50% 0%, #fffdf7, var(--card-face) 60%, #f4ecd7);
+  box-shadow:
+    0 22px 40px -14px rgba(50, 30, 14, 0.5),
+    inset 0 0 0 1px rgba(169, 130, 47, 0.35);
+}
+
+.holy-card::before {
   content: "";
   position: absolute;
-  inset: 10px;
-  border-radius: 13px;
+  inset: 6px;
   border: 1px solid var(--gold-line);
+  border-radius: 2px;
   pointer-events: none;
+}
+
+.holy-card-icon {
+  color: var(--wine);
+}
+
+.holy-card-quote {
+  font-family: var(--font-serif), Georgia, serif;
+  font-style: italic;
+  font-size: 0.98rem;
+  line-height: 1.5;
+  color: var(--wine-ink);
+  text-wrap: balance;
+}
+
+.holy-card-ref {
+  font-size: 0.56rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+
+/* ---------- UI après révélation ---------- */
+
+.reveal-ui {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 60px 20px calc(24px + env(safe-area-inset-bottom));
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: 5;
+  background: linear-gradient(
+    180deg,
+    transparent,
+    rgba(248, 243, 232, 0.55) 32%,
+    var(--paper) 78%
+  );
+}
+
+.ref-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.ref-chip {
+  font-family: var(--font-serif), Georgia, serif;
+  font-style: italic;
+  font-size: 1.02rem;
+  color: var(--wine-ink);
+  padding: 7px 18px;
+  border-radius: 999px;
+  border: 1px solid var(--gold-line);
+  background: rgba(253, 250, 242, 0.85);
+}
+
+.icon-btn {
+  width: 44px;
+  height: 44px;
+  flex: 0 0 auto;
+  border-radius: 999px;
+  border: 1px solid var(--gold-line);
+  background: rgba(253, 250, 242, 0.85);
+  color: var(--wine-ink);
+  display: grid;
+  place-items: center;
+  transition: background 0.25s, transform 0.15s, color 0.25s, border-color 0.25s;
+}
+
+.icon-btn:hover {
+  background: rgba(169, 130, 47, 0.12);
+}
+
+.icon-btn:active {
+  transform: scale(0.92);
+}
+
+.icon-btn--ok {
+  color: #2f7a43;
+  border-color: rgba(47, 122, 67, 0.5);
+  background: rgba(47, 122, 67, 0.1);
+}
+
+.card-actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.cta--small {
+  margin-top: 0;
+  padding: 12px 26px;
+  font-size: 0.78rem;
+  letter-spacing: 0.12em;
 }
 
 .face-label {
@@ -267,25 +812,7 @@ button {
   text-transform: uppercase;
   color: var(--gold);
   font-weight: 700;
-  margin-bottom: 20px;
-}
-
-.quote {
-  font-family: var(--font-serif), Georgia, serif;
-  font-style: italic;
-  font-weight: 500;
-  font-size: clamp(1.25rem, 5.4vw, 1.5rem);
-  line-height: 1.5;
-  color: var(--wine-ink);
-  text-wrap: balance;
-}
-
-.reference {
-  margin-top: 20px;
-  font-size: 0.72rem;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: var(--ink-soft);
+  margin-bottom: 14px;
 }
 
 .challenge {
@@ -299,54 +826,68 @@ button {
 }
 
 .footer-line {
-  margin-top: 26px;
+  margin-top: 22px;
   font-family: var(--font-serif), Georgia, serif;
   font-style: italic;
   font-size: 0.85rem;
   color: var(--gold);
 }
 
-.tap-hint {
-  margin-top: 30px;
-  font-size: 0.7rem;
-  letter-spacing: 0.24em;
-  text-transform: uppercase;
-  color: rgba(122, 103, 92, 0.8);
-}
+/* ---------- feuille du défi ---------- */
 
-.card-actions {
-  display: flex;
-  gap: 14px;
-  margin-top: 38px;
-}
-
-.gloss {
-  position: absolute;
+.sheet-mask {
+  position: fixed;
   inset: 0;
-  border-radius: 20px;
-  pointer-events: none;
-  background: radial-gradient(
-    420px circle at var(--gx, 50%) var(--gy, 30%),
-    rgba(255, 255, 255, 0.35),
-    transparent 60%
-  );
-  mix-blend-mode: soft-light;
+  z-index: 40;
+  background: rgba(30, 18, 10, 0.45);
+  backdrop-filter: blur(3px);
+}
+
+.sheet {
+  position: fixed;
+  left: 50%;
+  bottom: 0;
+  transform: translateX(-50%);
+  width: min(94vw, 440px);
+  z-index: 41;
+  padding: 34px 30px calc(30px + env(safe-area-inset-bottom));
+  border-radius: 26px 26px 0 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  background:
+    radial-gradient(120% 90% at 50% 0%, #fffdf8, var(--card-face) 60%, #f4ecd7);
+  box-shadow: 0 -20px 50px -18px rgba(40, 24, 12, 0.5);
+}
+
+.sheet::before {
+  content: "";
+  width: 42px;
+  height: 4px;
+  border-radius: 999px;
+  background: var(--gold-line);
+  margin-bottom: 22px;
+}
+
+.sheet-close {
+  margin-top: 24px;
 }
 
 .ornament {
   color: var(--gold);
-  margin-bottom: 18px;
+  margin-bottom: 12px;
 }
 
 .divider {
   width: 74px;
-  margin: 22px auto 0;
+  margin: 18px auto 0;
   color: var(--gold-soft);
 }
 
 @media (prefers-reduced-motion: reduce) {
   * {
-    animation: none !important;
-    transition: none !important;
+    animation-duration: 0.001ms !important;
+    transition-duration: 0.001ms !important;
   }
 }

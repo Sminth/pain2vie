@@ -42,6 +42,66 @@ export function Divider() {
   );
 }
 
+/* Copier : deux feuillets superposés */
+export function CopyIcon({ size = 20 }: { size?: number }) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.6"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden
+    >
+      <rect x="9" y="9" width="11" height="11" rx="2.4" />
+      <path d="M5 15V5.5A1.5 1.5 0 0 1 6.5 4H15" />
+    </svg>
+  );
+}
+
+/* Partager : nœud relié (icône système iOS/Android) */
+export function ShareIcon({ size = 20 }: { size?: number }) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.6"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden
+    >
+      <path d="M12 3v13" />
+      <path d="M8 7l4-4 4 4" />
+      <path d="M6 12H5a1.6 1.6 0 0 0-1.6 1.6V19A1.6 1.6 0 0 0 5 20.6h14A1.6 1.6 0 0 0 20.6 19v-5.4A1.6 1.6 0 0 0 19 12h-1" />
+    </svg>
+  );
+}
+
+/* Coche : confirmation « copié » */
+export function CheckIcon({ size = 20 }: { size?: number }) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.8"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden
+    >
+      <path d="M5 12.5l4.2 4.2L19 7" />
+    </svg>
+  );
+}
+
 const ICON_PATHS: Record<CardIcon, React.ReactNode> = {
   flame: (
     <>
