@@ -135,15 +135,15 @@ function buildLanding(card: HolyCard): Landing {
         markFrom: target?.from,
         markTo: target?.to,
       },
-      // suite d'ambiance pour que la page reste pleine, floutée ensuite
-      { chapterNo: chapter.chapter + 1, verses: poolSlice(pool, 5, 14) },
+      // suite d'ambiance : largement de quoi remplir, le surplus est rogné
+      { chapterNo: chapter.chapter + 1, verses: poolSlice(pool, 5, 42) },
     ],
   };
 
   const left: PageData = {
     head: book.name,
     folio,
-    blocks: [{ verses: poolSlice(pool, 2, 16) }],
+    blocks: [{ verses: poolSlice(pool, 2, 42) }],
   };
 
   return { chapterKey, frac: book.frac, left, right, target };
@@ -165,12 +165,12 @@ function buildFillerPages(targetFrac: number, pool: BibleVerse[]): Array<{
       front: {
         head: `${head} ${chap}`,
         folio: folio + 1,
-        blocks: [{ verses: poolSlice(pool, i * 2 + 1, 15) }],
+        blocks: [{ verses: poolSlice(pool, i * 2 + 1, 42) }],
       },
       back: {
         head,
         folio: folio + 2,
-        blocks: [{ verses: poolSlice(pool, i * 2 + 2, 15) }],
+        blocks: [{ verses: poolSlice(pool, i * 2 + 2, 42) }],
       },
     });
   }
@@ -569,6 +569,7 @@ export default function BibleReveal({
       exit={{ opacity: 0, filter: "blur(6px)" }}
       transition={{ duration: 0.45, ease: easeOut }}
     >
+      <div className="bible-anchor">
       <div
         className="bible-stage"
         style={{ width: STAGE_W, height: STAGE_H, transform: `scale(${fit})` }}
@@ -821,6 +822,7 @@ export default function BibleReveal({
           </div>
         </motion.div>
       </div>
+      </div>
 
       {/* référence + partage + actions */}
       <AnimatePresence>
@@ -878,26 +880,32 @@ export default function BibleReveal({
               exit={{ opacity: 0 }}
               onClick={() => setShowChallenge(false)}
             />
-            <motion.div
-              className="sheet"
-              initial={{ y: "108%" }}
-              animate={{ y: 0 }}
-              exit={{ y: "108%" }}
-              transition={{ duration: 0.6, ease: easeOut }}
-            >
-              <span className="ornament" style={{ color: "var(--wine)" }}>
-                <CardIconGlyph icon={card.icon} size={36} />
-              </span>
-              <p className="face-label">Défi spirituel</p>
-              <p className="challenge">{card.challenge}</p>
-              <Divider />
-              <p className="footer-line">
-                La sainteté de la famille commence à la maison.
-              </p>
-              <button className="ghost sheet-close" onClick={() => setShowChallenge(false)}>
-                Fermer
-              </button>
-            </motion.div>
+            <div className="sheet-wrap" onClick={() => setShowChallenge(false)}>
+              <motion.div
+                className="sheet"
+                initial={{ opacity: 0, scale: 0.88, y: 24 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                exit={{ opacity: 0, scale: 0.94, y: 16 }}
+                transition={{ duration: 0.5, ease: easeOut }}
+                onClick={(e) => e.stopPropagation()}
+              >
+                <span className="ornament" style={{ color: "var(--wine)" }}>
+                  <CardIconGlyph icon={card.icon} size={36} />
+                </span>
+                <p className="face-label">Défi spirituel</p>
+                <p className="challenge">{card.challenge}</p>
+                <Divider />
+                <p className="footer-line">
+                  La sainteté de la famille commence à la maison.
+                </p>
+                <button
+                  className="ghost sheet-close"
+                  onClick={() => setShowChallenge(false)}
+                >
+                  Fermer
+                </button>
+              </motion.div>
+            </div>
           </>
         )}
       </AnimatePresence>
