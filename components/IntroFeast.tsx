@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { ChapelOrnament } from "./icons";
 
@@ -78,7 +78,22 @@ const POINTS = [
 
 export default function IntroFeast({ onStart }: { onStart: () => void }) {
   const scrollRef = useRef<HTMLDivElement>(null);
+  const ctaRef = useRef<HTMLButtonElement>(null);
   const [zoom, setZoom] = useState<Photo | null>(null);
+  const [ctaVisible, setCtaVisible] = useState(false);
+
+  /* le bouton flotte tant que le vrai bouton (en bas) n'est pas à l'écran */
+  useEffect(() => {
+    const root = scrollRef.current;
+    const target = ctaRef.current;
+    if (!root || !target) return;
+    const io = new IntersectionObserver(
+      ([entry]) => setCtaVisible(entry.isIntersecting),
+      { root, threshold: 0.6 },
+    );
+    io.observe(target);
+    return () => io.disconnect();
+  }, []);
 
   const rise = (delay = 0) => ({
     initial: { opacity: 0, y: 24, filter: "blur(6px)" },
@@ -120,8 +135,11 @@ export default function IntroFeast({ onStart }: { onStart: () => void }) {
         <motion.p className="eyebrow" {...rise(0.26)}>
           Fête des saints Louis &amp; Zélie Martin
         </motion.p>
-        <motion.p className="feast-date" {...rise(0.36)}>
-          Dimanche 12 juillet
+        <motion.p className="feast-tagline" {...rise(0.32)}>
+          Couple missionnaire
+        </motion.p>
+        <motion.p className="feast-date" {...rise(0.4)}>
+          Dimanche 12 juillet 2026
         </motion.p>
 
         <motion.div className="feast-cards" {...rise(0.46)}>
@@ -148,7 +166,7 @@ export default function IntroFeast({ onStart }: { onStart: () => void }) {
         </div>
 
         <motion.div className="feast-points-wrap" {...inView(0)}>
-          <p className="feast-points-title">En bref</p>
+          <p className="feast-points-title">En resumé</p>
           <ul className="feast-points">
             {POINTS.map((p, i) => (
               <li key={i}>{p}</li>
@@ -160,12 +178,30 @@ export default function IntroFeast({ onStart }: { onStart: () => void }) {
           <p className="feast-cta-lead">Et toi, cette semaine&nbsp;?</p>
           <p className="feast-question">Quelle parole t’accompagne cette semaine&nbsp;?</p>
           <p className="feast-question">Quel est ton défi de la semaine&nbsp;?</p>
-          <button className="cta" onClick={onStart}>
+          <button className="cta" ref={ctaRef} onClick={onStart}>
             Recevoir ma parole
           </button>
         </motion.div>
       </div>
     </motion.section>
+
+    <div className="feast-float-wrap">
+      <AnimatePresence>
+        {!ctaVisible && !zoom && (
+          <motion.button
+            type="button"
+            className="cta feast-float-cta"
+            onClick={onStart}
+            initial={{ opacity: 0, y: 24 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 24 }}
+            transition={{ duration: 0.35, ease: easeOut }}
+          >
+            Recevoir ma parole
+          </motion.button>
+        )}
+      </AnimatePresence>
+    </div>
 
     <AnimatePresence>
       {zoom && (

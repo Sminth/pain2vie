@@ -1,19 +1,17 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence } from "framer-motion";
 import { CARDS, type HolyCard } from "@/data/cards";
 import { locateReference } from "@/data/bible";
-import BibleReveal, { ClosedBible } from "./BibleReveal";
+import BibleReveal from "./BibleReveal";
 import LightReveal from "./LightReveal";
 import IntroFeast from "./IntroFeast";
 
 const STORAGE_KEY = "saintete-famille-drawn";
 const TOTAL = CARDS.length;
 
-type Phase = "intro" | "reveal" | "bible";
-
-const easeOut = [0.22, 1, 0.36, 1] as const;
+type Phase = "intro" | "reveal";
 
 export default function Experience() {
   const [phase, setPhase] = useState<Phase>("intro");
@@ -58,65 +56,17 @@ export default function Experience() {
             <BibleReveal
               key={`reveal-${card.id}-${drawnRef.current.length}`}
               card={card}
-              onAnother={() => setPhase("bible")}
+              onAnother={() => setPhase("intro")}
             />
           ) : (
             <LightReveal
               key={`reveal-${card.id}-${drawnRef.current.length}`}
               card={card}
-              onAnother={() => setPhase("bible")}
+              onAnother={() => setPhase("intro")}
             />
           )
         )}
-        {phase === "bible" && <BibleWait key="bible" onOpen={() => draw()} />}
       </AnimatePresence>
     </main>
-  );
-}
-
-/* ------------------------- Bible fermée, en attente ------------------------ */
-
-function BibleWait({ onOpen }: { onOpen: () => void }) {
-  return (
-    <motion.section
-      className="scene"
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0, scale: 0.98 }}
-      transition={{ duration: 0.5, ease: easeOut }}
-    >
-      <motion.p
-        className="eyebrow"
-        initial={{ opacity: 0, y: 16 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.7, delay: 0.1, ease: easeOut }}
-        style={{ marginBottom: "clamp(28px, 6vh, 44px)" }}
-      >
-        La Parole
-      </motion.p>
-
-      <motion.button
-        type="button"
-        aria-label="Ouvrir la Bible pour recevoir une parole"
-        className="bible-wait"
-        onClick={onOpen}
-        initial={{ opacity: 0, y: 40, scale: 0.9 }}
-        animate={{ opacity: 1, y: 0, scale: 1 }}
-        transition={{ duration: 0.8, delay: 0.15, ease: easeOut }}
-        whileHover={{ scale: 1.03 }}
-        whileTap={{ scale: 0.96 }}
-      >
-        <ClosedBible />
-      </motion.button>
-
-      <motion.p
-        className="hint"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: [0.4, 1, 0.4] }}
-        transition={{ duration: 2.6, repeat: Infinity, ease: "easeInOut", delay: 0.6 }}
-      >
-        Touche la Bible pour recevoir une parole
-      </motion.p>
-    </motion.section>
   );
 }
