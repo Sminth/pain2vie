@@ -21,31 +21,54 @@ function Petal({ color }: { color: string }) {
   );
 }
 
-/* explosion depuis le centre au chargement */
-const BURST = Array.from({ length: 18 }, (_, i) => {
-  const ang = (i / 18) * Math.PI * 2;
-  const spread = 120 + (i % 5) * 30;
+/* petite fleur (rose de face) — pour mêler de vraies fleurs aux pétales */
+function Blossom({ color }: { color: string }) {
+  return (
+    <svg viewBox="0 0 40 40" width="100%" height="100%" aria-hidden>
+      {[0, 72, 144, 216, 288].map((a) => (
+        <ellipse
+          key={a}
+          cx="20"
+          cy="11"
+          rx="6.2"
+          ry="9.4"
+          fill={color}
+          transform={`rotate(${a} 20 20)`}
+        />
+      ))}
+      <circle cx="20" cy="20" r="4.6" fill="#e6b463" />
+    </svg>
+  );
+}
+
+/* grosse explosion de pétales & fleurs depuis le centre au chargement */
+const BURST = Array.from({ length: 64 }, (_, i) => {
+  const ang = i * 137.5 * (Math.PI / 180); // angle d'or → répartition régulière
+  const R = 120 + (i % 11) * 52; // jusqu'à ~640px, remplit l'écran
+  const kind = i % 4 === 0 ? "blossom" : "petal";
   return {
-    dx: Math.cos(ang) * spread,
-    dy: Math.sin(ang) * 80 + 150 + (i % 4) * 46,
-    rot: (i % 2 ? 1 : -1) * (140 + i * 12),
-    scale: 0.7 + (i % 5) * 0.12,
-    dur: 1.9 + (i % 6) * 0.24,
-    delay: (i % 9) * 0.045,
-    size: 16 + (i % 5) * 5,
+    kind,
+    dx: Math.cos(ang) * R,
+    dy: Math.sin(ang) * R * 0.72 + 130 + (i % 7) * 54,
+    rot: (i % 2 ? 1 : -1) * (140 + (i % 9) * 46),
+    scale: 0.7 + (i % 6) * 0.13,
+    dur: 2 + (i % 8) * 0.18,
+    delay: (i % 14) * 0.035,
+    size: kind === "blossom" ? 26 + (i % 5) * 6 : 15 + (i % 6) * 5,
     color: PETAL_COLORS[i % PETAL_COLORS.length],
   };
 });
 
 /* pétales qui tombent doucement en continu */
-const AMBIENT = Array.from({ length: 11 }, (_, i) => ({
-  left: (i * 9 + (i % 3) * 5) % 100,
-  drift: 22 + (i % 4) * 16,
+const AMBIENT = Array.from({ length: 18 }, (_, i) => ({
+  left: (i * 5.7 + (i % 4) * 6) % 100,
+  drift: 22 + (i % 5) * 15,
   r0: i * 26,
   r1: i * 26 + (i % 2 ? 220 : -220),
-  dur: 9 + (i % 5) * 1.7,
-  delay: (i % 11) * 0.9,
+  dur: 8 + (i % 6) * 1.6,
+  delay: (i % 18) * 0.55,
   size: 13 + (i % 4) * 6,
+  kind: i % 5 === 0 ? "blossom" : "petal",
   color: PETAL_COLORS[i % PETAL_COLORS.length],
 }));
 
@@ -56,8 +79,8 @@ export default function RosePetals() {
         <motion.span
           key={`b${i}`}
           className="petal petal--burst"
-          style={{ width: p.size, height: p.size * 1.25 }}
-          initial={{ x: 0, y: 0, rotate: 0, scale: 0.3, opacity: 0 }}
+          style={{ width: p.size, height: p.size * (p.kind === "blossom" ? 1 : 1.25) }}
+          initial={{ x: 0, y: 0, rotate: 0, scale: 0.2, opacity: 0 }}
           animate={{
             x: p.dx,
             y: p.dy,
@@ -65,9 +88,9 @@ export default function RosePetals() {
             scale: p.scale,
             opacity: [0, 1, 1, 0],
           }}
-          transition={{ duration: p.dur, delay: p.delay, ease: "easeOut" }}
+          transition={{ duration: p.dur, delay: p.delay, ease: [0.16, 0.6, 0.3, 1] }}
         >
-          <Petal color={p.color} />
+          {p.kind === "blossom" ? <Blossom color={p.color} /> : <Petal color={p.color} />}
         </motion.span>
       ))}
 
@@ -75,7 +98,11 @@ export default function RosePetals() {
         <motion.span
           key={`a${i}`}
           className="petal"
-          style={{ left: `${p.left}%`, width: p.size, height: p.size * 1.25 }}
+          style={{
+            left: `${p.left}%`,
+            width: p.size,
+            height: p.size * (p.kind === "blossom" ? 1 : 1.25),
+          }}
           initial={{ y: "-12vh", rotate: p.r0, opacity: 0 }}
           animate={{
             y: "116vh",
@@ -90,7 +117,7 @@ export default function RosePetals() {
             opacity: { duration: p.dur, delay: p.delay, repeat: Infinity, ease: "easeInOut" },
           }}
         >
-          <Petal color={p.color} />
+          {p.kind === "blossom" ? <Blossom color={p.color} /> : <Petal color={p.color} />}
         </motion.span>
       ))}
     </div>
