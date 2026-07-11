@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import type { HolyCard } from "@/data/cards";
 import {
@@ -29,6 +29,8 @@ export default function ParoleOutcome({
   const [busy, setBusy] = useState(false);
   const [showUi, setShowUi] = useState(false);
   const shareRef = useRef<HTMLDivElement>(null);
+  const pngRef = useRef<Blob | null>(null);
+  const fileName = `parole-louis-zelie-${card.id}.png`;
 
   useEffect(() => {
     const t = setTimeout(() => setShowUi(true), 650);
@@ -38,6 +40,46 @@ export default function ParoleOutcome({
   const shareText = card.reference
     ? `« ${card.quote} »\n${card.reference}\n\nDéfi : ${card.challenge}`
     : `« ${card.quote} »\n\nDéfi : ${card.challenge}`;
+
+  const buildBlob = useCallback(async (): Promise<Blob | null> => {
+    const node = shareRef.current;
+    if (!node) return null;
+    const { toPng } = await import("html-to-image");
+    // toPng (toDataURL) puis fetch→Blob : évite le callback canvas.toBlob,
+    // plus fiable selon les navigateurs. Garde-fou de temps pour ne jamais bloquer.
+    const dataUrl = (await Promise.race([
+      toPng(node, { pixelRatio: 2, cacheBust: true, backgroundColor: "#f8f3e8" }),
+      new Promise<string>((_, rej) =>
+        setTimeout(() => rej(new Error("timeout")), 15000),
+      ),
+    ])) as string;
+    const res = await fetch(dataUrl);
+    return res.blob();
+  }, []);
+
+  /* pré-génère l'image dès que la carte est prête → partage/téléchargement
+     instantané (et compatible avec l'activation utilisateur d'iOS). */
+  useEffect(() => {
+    let alive = true;
+    const t = setTimeout(async () => {
+      try {
+        const blob = await buildBlob();
+        if (alive) pngRef.current = blob;
+      } catch (e) {
+        // eslint-disable-next-line no-console
+        console.error("[ParoleOutcome] pré-génération image :", e);
+      }
+    }, 900);
+    return () => {
+      alive = false;
+      clearTimeout(t);
+    };
+  }, [buildBlob]);
+
+  const getBlob = async (): Promise<Blob | null> => {
+    if (!pngRef.current) pngRef.current = await buildBlob();
+    return pngRef.current;
+  };
 
   const handleCopy = async () => {
     try {
@@ -50,32 +92,50 @@ export default function ParoleOutcome({
   };
 
   const handleShare = async () => {
+    if (busy) return;
+    setBusy(true);
+    try {
+      const blob = await getBlob();
+      if (blob && typeof navigator !== "undefined" && navigator.canShare) {
+        const file = new File([blob], fileName, { type: "image/png" });
+        if (navigator.canShare({ files: [file] })) {
+          await navigator.share({
+            files: [file],
+            title: "La sainteté de la famille",
+            text: shareText,
+          });
+          return;
+        }
+      }
+    } catch {
+      /* partage image annulé ou non supporté → replis ci-dessous */
+    } finally {
+      setBusy(false);
+    }
+    // repli : partage texte, sinon copie
     if (typeof navigator !== "undefined" && navigator.share) {
       try {
         await navigator.share({ title: "La sainteté de la famille", text: shareText });
+        return;
       } catch {
-        /* partage annulé */
+        /* annulé */
       }
-    } else {
-      handleCopy();
     }
+    handleCopy();
   };
 
   const handleDownload = async () => {
-    const node = shareRef.current;
-    if (!node || busy) return;
+    if (busy) return;
     setBusy(true);
     try {
-      const { toPng } = await import("html-to-image");
-      const dataUrl = await toPng(node, {
-        pixelRatio: 2,
-        cacheBust: true,
-        backgroundColor: "#f8f3e8",
-      });
+      const blob = await getBlob();
+      if (!blob) return;
+      const url = URL.createObjectURL(blob);
       const a = document.createElement("a");
-      a.download = `parole-louis-zelie-${card.id}.png`;
-      a.href = dataUrl;
+      a.download = fileName;
+      a.href = url;
       a.click();
+      setTimeout(() => URL.revokeObjectURL(url), 4000);
     } catch (e) {
       // eslint-disable-next-line no-console
       console.error("[ParoleOutcome] Téléchargement impossible :", e);
@@ -146,7 +206,7 @@ export default function ParoleOutcome({
                 disabled={busy}
               >
                 <DownloadIcon size={19} />
-                <span className="icon-btn-label">{busy ? "…" : "Image"}</span>
+                <span className="icon-btn-label">{busy ? "…" : "Télécharger"}</span>
               </button>
             </div>
             <div className="card-actions">

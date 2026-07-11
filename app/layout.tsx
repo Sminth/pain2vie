@@ -16,13 +16,18 @@ const sans = Jost({
 });
 
 export const metadata: Metadata = {
-  title: "La sainteté de la famille — Pioche une carte",
+  title: "La sainteté commence à la maison — Louis & Zélie Martin",
   description:
-    "Fête des saints Louis et Zélie Martin. Pioche une carte, reçois une parole et relève un défi spirituel pour ta famille.",
+    "Fête des saints Louis et Zélie Martin. Reçois une parole à méditer et un défi spirituel à vivre en famille.",
+  icons: {
+    icon: "/favicon.png",
+    shortcut: "/favicon.png",
+    apple: "/favicon.png",
+  },
   openGraph: {
-    title: "La sainteté de la famille",
+    title: "La sainteté commence à la maison",
     description:
-      "Pioche une carte : une parole à méditer, un défi à vivre en famille. Fête des saints Louis et Zélie Martin.",
+      "Une parole à méditer, un défi à vivre en famille. Fête des saints Louis et Zélie Martin.",
     locale: "fr_FR",
     type: "website",
   },

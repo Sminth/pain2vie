@@ -1,42 +1,60 @@
 "use client";
 
 import { useRef, useState } from "react";
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import { ChapelOrnament } from "./icons";
 
 const easeOut = [0.22, 1, 0.36, 1] as const;
+
+type Photo = { src: string; alt: string; caption: string };
 
 const PHOTOS = [
   { src: "/martin/image.png", alt: "Les saints Louis et Zélie Martin", caption: "Louis & Zélie" },
   { src: "/martin/image1.png", alt: "La famille Martin", caption: "La famille Martin" },
   { src: "/martin/image2.png", alt: "Louis, sainte Thérèse et Zélie", caption: "Avec Thérèse" },
+  { src: "/martin/image3.png", alt: "Louis, sainte Thérèse et Zélie", caption: "Avec Thérèse" },
 ];
 
-/* Carte-photo avec repli si le fichier manque. */
+/* Carte-photo cliquable (agrandissement) avec repli si le fichier manque. */
 function FeastCard({
-  src,
-  alt,
-  caption,
+  photo,
   rot,
+  onOpen,
 }: {
-  src: string;
-  alt: string;
-  caption: string;
+  photo: Photo;
   rot: number;
+  onOpen: (p: Photo) => void;
 }) {
   const [ok, setOk] = useState(true);
   return (
-    <figure className="feast-card" style={{ "--rot": `${rot}deg` } as React.CSSProperties}>
+    <figure
+      className="feast-card"
+      style={{ "--rot": `${rot}deg` } as React.CSSProperties}
+      onClick={ok ? () => onOpen(photo) : undefined}
+      role={ok ? "button" : undefined}
+      tabIndex={ok ? 0 : undefined}
+      aria-label={ok ? `Agrandir la photo : ${photo.caption}` : undefined}
+      onKeyDown={
+        ok
+          ? (e) => {
+              if (e.key === "Enter" || e.key === " ") {
+                e.preventDefault();
+                onOpen(photo);
+              }
+            }
+          : undefined
+      }
+    >
       {ok ? (
         // eslint-disable-next-line @next/next/no-img-element
-        <img src={src} alt={alt} onError={() => setOk(false)} />
+        <img src={photo.src} alt={photo.alt} onError={() => setOk(false)} />
       ) : (
         <div className="feast-card-ph">
           <ChapelOrnament size={24} />
-          <code>public{src}</code>
+          <code>public{photo.src}</code>
         </div>
       )}
-      <figcaption>{caption}</figcaption>
+      <figcaption>{photo.caption}</figcaption>
     </figure>
   );
 }
@@ -60,6 +78,7 @@ const POINTS = [
 
 export default function IntroFeast({ onStart }: { onStart: () => void }) {
   const scrollRef = useRef<HTMLDivElement>(null);
+  const [zoom, setZoom] = useState<Photo | null>(null);
 
   const rise = (delay = 0) => ({
     initial: { opacity: 0, y: 24, filter: "blur(6px)" },
@@ -75,6 +94,7 @@ export default function IntroFeast({ onStart }: { onStart: () => void }) {
   });
 
   return (
+    <>
     <motion.section
       className="feast"
       ref={scrollRef}
@@ -106,7 +126,12 @@ export default function IntroFeast({ onStart }: { onStart: () => void }) {
 
         <motion.div className="feast-cards" {...rise(0.46)}>
           {PHOTOS.map((p, i) => (
-            <FeastCard key={p.src} {...p} rot={[-4, 1.5, 3.5][i]} />
+            <FeastCard
+              key={p.src}
+              photo={p}
+              rot={[-5, -1.5, 2, 5][i] ?? 0}
+              onOpen={setZoom}
+            />
           ))}
         </motion.div>
 
@@ -141,5 +166,40 @@ export default function IntroFeast({ onStart }: { onStart: () => void }) {
         </motion.div>
       </div>
     </motion.section>
+
+    <AnimatePresence>
+      {zoom && (
+        <motion.div
+          className="lightbox"
+          onClick={() => setZoom(null)}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.3 }}
+        >
+          <motion.figure
+            className="lightbox-fig"
+            initial={{ scale: 0.85, opacity: 0, y: 12 }}
+            animate={{ scale: 1, opacity: 1, y: 0 }}
+            exit={{ scale: 0.9, opacity: 0 }}
+            transition={{ duration: 0.4, ease: easeOut }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={zoom.src} alt={zoom.alt} />
+            <figcaption>{zoom.caption}</figcaption>
+          </motion.figure>
+          <button
+            type="button"
+            className="lightbox-close"
+            aria-label="Fermer"
+            onClick={() => setZoom(null)}
+          >
+            ×
+          </button>
+        </motion.div>
+      )}
+    </AnimatePresence>
+    </>
   );
 }
