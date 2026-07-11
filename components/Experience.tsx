@@ -3,20 +3,22 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { CARDS, type HolyCard } from "@/data/cards";
+import { locateReference } from "@/data/bible";
 import BibleReveal, { ClosedBible } from "./BibleReveal";
+import LightReveal from "./LightReveal";
+import IntroFeast from "./IntroFeast";
 
 const STORAGE_KEY = "saintete-famille-drawn";
 const TOTAL = CARDS.length;
 
-type Phase = "reveal" | "bible";
+type Phase = "intro" | "reveal" | "bible";
 
 const easeOut = [0.22, 1, 0.36, 1] as const;
 
 export default function Experience() {
-  const [phase, setPhase] = useState<Phase>("reveal");
+  const [phase, setPhase] = useState<Phase>("intro");
   const [card, setCard] = useState<HolyCard | null>(null);
   const drawnRef = useRef<number[]>([]);
-  const started = useRef(false);
 
   const draw = useCallback(() => {
     const prev = drawnRef.current;
@@ -35,10 +37,7 @@ export default function Experience() {
     setPhase("reveal");
   }, []);
 
-  /* au chargement / à l'actualisation : la Bible s'ouvre directement */
   useEffect(() => {
-    if (started.current) return;
-    started.current = true;
     try {
       const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) ?? "[]");
       if (Array.isArray(saved)) {
@@ -47,21 +46,29 @@ export default function Experience() {
     } catch {
       /* première visite */
     }
-    draw();
-  }, [draw]);
+  }, []);
 
   return (
     <main className="stage">
       <div className="grain" />
       <AnimatePresence mode="wait">
+        {phase === "intro" && <IntroFeast key="intro" onStart={() => draw()} />}
         {phase === "reveal" && card && (
-          <BibleReveal
-            key={`reveal-${card.id}-${drawnRef.current.length}`}
-            card={card}
-            onAnother={() => setPhase("bible")}
-          />
+          card.reference && locateReference(card.reference) ? (
+            <BibleReveal
+              key={`reveal-${card.id}-${drawnRef.current.length}`}
+              card={card}
+              onAnother={() => setPhase("bible")}
+            />
+          ) : (
+            <LightReveal
+              key={`reveal-${card.id}-${drawnRef.current.length}`}
+              card={card}
+              onAnother={() => setPhase("bible")}
+            />
+          )
         )}
-        {phase === "bible" && <BibleWait key="bible" onOpen={draw} />}
+        {phase === "bible" && <BibleWait key="bible" onOpen={() => draw()} />}
       </AnimatePresence>
     </main>
   );

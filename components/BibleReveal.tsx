@@ -7,7 +7,7 @@ import {
   useRef,
   useState,
 } from "react";
-import { AnimatePresence, motion } from "framer-motion";
+import { motion } from "framer-motion";
 import type { HolyCard } from "@/data/cards";
 import {
   BIBLE_TOC,
@@ -17,7 +17,7 @@ import {
   type BibleVerse,
   type VerseTarget,
 } from "@/data/bible";
-import { CardIconGlyph, CheckIcon, CopyIcon, Divider, ShareIcon } from "./icons";
+import ParoleOutcome from "./ParoleOutcome";
 
 /* ------------------------------- géométrie -------------------------------- */
 
@@ -382,38 +382,7 @@ export default function BibleReveal({
   const [coverLanded, setCoverLanded] = useState(false);
   const [lines, setLines] = useState<LineRect[] | null>(null);
   const [cam, setCam] = useState<{ x: number; y: number; scale: number } | null>(null);
-  const [showChallenge, setShowChallenge] = useState(false);
-  const [copied, setCopied] = useState(false);
   const [fit, setFit] = useState(1);
-
-  const shareText = card.reference
-    ? `« ${card.quote} »\n${card.reference}`
-    : `« ${card.quote} »`;
-
-  const handleCopy = async () => {
-    try {
-      await navigator.clipboard.writeText(shareText);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 1800);
-    } catch {
-      /* presse-papiers indisponible */
-    }
-  };
-
-  const handleShare = async () => {
-    if (typeof navigator !== "undefined" && navigator.share) {
-      try {
-        await navigator.share({
-          title: "La sainteté de la famille",
-          text: shareText,
-        });
-      } catch {
-        /* partage annulé */
-      }
-    } else {
-      handleCopy();
-    }
-  };
 
   const bookRef = useRef<HTMLDivElement>(null);
   const camRef = useRef<HTMLDivElement>(null);
@@ -800,118 +769,10 @@ export default function BibleReveal({
       </div>
       </div>
 
-      {/* le verset « sort » de la Bible et s'affiche en grand, bien lisible */}
-      <AnimatePresence>
-        {(step === "present" || step === "done") && (
-          <motion.div
-            className="verse-present"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.4 }}
-          >
-            <motion.div
-              className="verse-card"
-              initial={{ opacity: 0, scale: 0.58, y: 10 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              transition={{ duration: 0.75, ease: easeOut }}
-            >
-              <span className="verse-card-icon">
-                <CardIconGlyph icon={card.icon} size={30} />
-              </span>
-              <p className="verse-card-quote">«&nbsp;{card.quote}&nbsp;»</p>
-              {card.reference && (
-                <p className="verse-card-ref">{card.reference}</p>
-              )}
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-
-      {/* référence + partage + actions */}
-      <AnimatePresence>
-        {step === "done" && (
-          <motion.div
-            className="reveal-ui"
-            initial={{ opacity: 0, y: 18 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.7, ease: easeOut }}
-          >
-            <div className="ref-row">
-              <button
-                type="button"
-                className={`icon-btn${copied ? " icon-btn--ok" : ""}`}
-                onClick={handleCopy}
-                aria-label="Copier la parole"
-                title="Copier"
-              >
-                {copied ? <CheckIcon size={19} /> : <CopyIcon size={19} />}
-                <span className="icon-btn-label">{copied ? "Copié" : "Copier"}</span>
-              </button>
-              <button
-                type="button"
-                className="icon-btn"
-                onClick={handleShare}
-                aria-label="Partager la parole"
-                title="Partager"
-              >
-                <ShareIcon size={19} />
-                <span className="icon-btn-label">Partager</span>
-              </button>
-            </div>
-            <div className="card-actions">
-              <button className="ghost" onClick={onAnother}>
-                Autre parole
-              </button>
-              <button className="cta cta--small" onClick={() => setShowChallenge(true)}>
-                Voir le défi
-              </button>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-
-      {/* défi spirituel */}
-      <AnimatePresence>
-        {showChallenge && (
-          <>
-            <motion.div
-              className="sheet-mask"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              onClick={() => setShowChallenge(false)}
-            />
-            <div className="sheet-wrap" onClick={() => setShowChallenge(false)}>
-              <motion.div
-                className="sheet"
-                initial={{ opacity: 0, scale: 0.88, y: 24 }}
-                animate={{ opacity: 1, scale: 1, y: 0 }}
-                exit={{ opacity: 0, scale: 0.94, y: 16 }}
-                transition={{ duration: 0.5, ease: easeOut }}
-                onClick={(e) => e.stopPropagation()}
-              >
-                <span className="ornament" style={{ color: "var(--wine)" }}>
-                  <CardIconGlyph icon={card.icon} size={36} />
-                </span>
-                <p className="face-label">Défi spirituel</p>
-                <p className="challenge">{card.challenge}</p>
-                <Divider />
-                <p className="footer-line">
-                  La sainteté de la famille commence à la maison.
-                </p>
-                <button
-                  className="ghost sheet-close"
-                  onClick={() => setShowChallenge(false)}
-                >
-                  Fermer
-                </button>
-              </motion.div>
-            </div>
-          </>
-        )}
-      </AnimatePresence>
+      {/* le verset « sort » de la Bible : carte lisible + partage + défi */}
+      {(step === "present" || step === "done") && (
+        <ParoleOutcome card={card} onAnother={onAnother} />
+      )}
     </motion.section>
   );
 }

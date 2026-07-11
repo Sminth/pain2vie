@@ -782,6 +782,10 @@ button {
   transform: scale(0.92);
 }
 
+.icon-btn:disabled {
+  opacity: 0.55;
+}
+
 .icon-btn--ok {
   color: #2f7a43;
   border-color: rgba(47, 122, 67, 0.5);
@@ -888,6 +892,430 @@ button {
   width: 74px;
   margin: 18px auto 0;
   color: var(--gold-soft);
+}
+
+/* ======================= page d'accueil : la fête ========================= */
+
+.feast {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.feast-logo {
+  position: fixed;
+  top: max(12px, env(safe-area-inset-top));
+  left: 14px;
+  z-index: 8;
+  width: clamp(84px, 26vw, 120px);
+  height: auto;
+  filter: drop-shadow(0 4px 10px rgba(60, 40, 20, 0.18));
+  pointer-events: none;
+}
+
+.feast-inner {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: clamp(46px, 8vh, 76px) 22px calc(46px + env(safe-area-inset-bottom));
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.feast-ornament {
+  color: var(--gold);
+  margin-bottom: 12px;
+}
+
+.feast-date {
+  margin-top: 8px;
+  font-family: var(--font-serif), Georgia, serif;
+  font-style: italic;
+  font-size: 1.05rem;
+  color: var(--wine-ink);
+}
+
+/* --- photos : cartes côte à côte --- */
+
+.feast-cards {
+  width: 100%;
+  margin: 34px 0 10px;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  gap: clamp(8px, 3vw, 16px);
+}
+
+.feast-card {
+  flex: 1 1 0;
+  max-width: 156px;
+  margin: 0;
+  position: relative;
+  aspect-ratio: 3 / 4;
+  overflow: hidden;
+  border-radius: 12px;
+  background:
+    repeating-linear-gradient(135deg, #efe6d0 0 12px, #ece1c8 12px 24px);
+  border: 4px solid #fdfaf2;
+  box-shadow: 0 16px 32px -14px rgba(60, 40, 20, 0.5);
+  transform: rotate(var(--rot, 0deg));
+  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.feast-card:nth-child(2) {
+  transform: rotate(var(--rot, 0deg)) translateY(-8px);
+  z-index: 2;
+}
+
+.feast-card:hover {
+  transform: rotate(0deg) translateY(-4px) scale(1.04);
+  z-index: 3;
+}
+
+.feast-card img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 22%;
+}
+
+.feast-card figcaption {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 20px 6px 6px;
+  font-size: clamp(0.56rem, 2.4vw, 0.68rem);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  font-weight: 600;
+  color: #f6ead2;
+  background: linear-gradient(180deg, transparent, rgba(50, 20, 26, 0.8));
+}
+
+.feast-card-ph {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 10px;
+  text-align: center;
+  color: var(--gold);
+}
+
+.feast-card-ph code {
+  font-size: 0.5rem;
+  color: rgba(122, 103, 92, 0.8);
+  word-break: break-all;
+}
+
+/* --- textes --- */
+
+.feast-title {
+  font-family: var(--font-serif), Georgia, serif;
+  font-weight: 500;
+  font-size: clamp(1.85rem, 7vw, 2.6rem);
+  line-height: 1.16;
+  color: var(--wine-ink);
+  margin: 28px 0 6px;
+  text-wrap: balance;
+}
+
+.feast-text {
+  margin-top: 18px;
+}
+
+.feast-text p {
+  font-family: var(--font-serif), Georgia, serif;
+  font-size: 1.02rem;
+  line-height: 1.75;
+  color: var(--ink-soft);
+  margin-bottom: 16px;
+  text-wrap: pretty;
+}
+
+.feast-points-wrap {
+  width: 100%;
+  margin-top: 22px;
+  padding: 24px 22px 10px;
+  border-radius: 18px;
+  text-align: left;
+  background: rgba(253, 250, 242, 0.6);
+  border: 1px solid var(--gold-line);
+}
+
+.feast-points-title {
+  text-align: center;
+  font-size: 0.72rem;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--gold);
+  font-weight: 700;
+  margin-bottom: 18px;
+}
+
+.feast-points {
+  list-style: none;
+}
+
+.feast-points li {
+  position: relative;
+  padding-left: 24px;
+  margin-bottom: 15px;
+  font-family: var(--font-serif), Georgia, serif;
+  font-size: 0.98rem;
+  line-height: 1.55;
+  color: var(--ink);
+}
+
+.feast-points li::before {
+  content: "";
+  position: absolute;
+  left: 4px;
+  top: 0.5em;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--gold-soft);
+  box-shadow: 0 0 0 3px rgba(201, 166, 89, 0.18);
+}
+
+/* --- appel à l'action --- */
+
+.feast-cta {
+  width: 100%;
+  margin-top: 36px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.feast-cta-lead {
+  font-family: var(--font-serif), Georgia, serif;
+  font-style: italic;
+  font-size: 1.2rem;
+  color: var(--wine-ink);
+  margin-bottom: 4px;
+}
+
+.feast-question {
+  font-family: var(--font-serif), Georgia, serif;
+  font-size: 1.02rem;
+  line-height: 1.5;
+  color: var(--ink-soft);
+  max-width: 30ch;
+  text-wrap: balance;
+}
+
+.feast-question + .feast-question {
+  margin-top: 2px;
+}
+
+.feast .cta {
+  width: 100%;
+  max-width: 430px;
+  margin-top: 18px;
+  padding: 17px 26px;
+  font-size: 0.98rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  line-height: 1.35;
+}
+
+.cta--ghost {
+  background: transparent;
+  color: var(--wine-ink);
+  border: 1px solid var(--gold-line);
+  box-shadow: none;
+}
+
+.cta--ghost:hover {
+  background: rgba(169, 130, 47, 0.1);
+  box-shadow: none;
+}
+
+/* ============== révélation lumineuse (paroles non bibliques) ============== */
+
+.light-scene {
+  overflow: hidden;
+}
+
+.light-stage {
+  position: fixed;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.light-bloom {
+  position: absolute;
+  width: 128vmin;
+  height: 128vmin;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgba(255, 234, 150, 0.6),
+    rgba(201, 166, 89, 0.16) 42%,
+    transparent 70%
+  );
+  filter: blur(4px);
+}
+
+.light-rays {
+  position: absolute;
+  width: 172vmin;
+  height: 172vmin;
+  border-radius: 50%;
+  background: repeating-conic-gradient(
+    from 0deg,
+    rgba(201, 166, 89, 0.16) 0deg 5deg,
+    transparent 5deg 17deg
+  );
+  -webkit-mask-image: radial-gradient(circle, #000 16%, transparent 60%);
+  mask-image: radial-gradient(circle, #000 16%, transparent 60%);
+}
+
+.light-ornament {
+  position: absolute;
+  color: var(--wine-ink);
+  filter: drop-shadow(0 0 16px rgba(201, 166, 89, 0.7));
+}
+
+/* ==================== carte téléchargeable (parole + défi) ================= */
+
+.share-offscreen {
+  position: fixed;
+  left: -20000px;
+  top: 0;
+  z-index: -1;
+  pointer-events: none;
+}
+
+.share-card {
+  position: relative;
+  width: 1000px;
+  box-sizing: border-box;
+  padding: 86px 84px 74px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  font-family: var(--font-serif), Georgia, serif;
+  color: var(--ink);
+  background: radial-gradient(130% 100% at 50% 0%, #fffdf8, #f6efdd 58%, #f1e7cf);
+}
+
+.share-frame {
+  position: absolute;
+  inset: 24px;
+  border: 2px solid var(--gold-line);
+  border-radius: 12px;
+}
+
+.share-frame::before {
+  content: "";
+  position: absolute;
+  inset: 9px;
+  border: 1px solid rgba(169, 130, 47, 0.3);
+  border-radius: 7px;
+}
+
+.share-head {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 46px;
+}
+
+.share-emblem {
+  color: var(--gold);
+}
+
+.share-head-title {
+  font-size: 30px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  color: var(--wine-ink);
+}
+
+.share-head-sub {
+  font-style: italic;
+  font-size: 21px;
+  color: var(--gold);
+}
+
+.share-block {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+  max-width: 800px;
+}
+
+.share-label {
+  font-family: var(--font-sans), sans-serif;
+  font-size: 17px;
+  letter-spacing: 0.34em;
+  text-transform: uppercase;
+  font-weight: 700;
+  color: var(--gold);
+}
+
+.share-quote {
+  font-style: italic;
+  font-weight: 500;
+  font-size: 46px;
+  line-height: 1.4;
+  color: var(--wine-ink);
+}
+
+.share-ref {
+  font-family: var(--font-sans), sans-serif;
+  font-size: 19px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+
+.share-rule {
+  margin: 44px 0;
+  color: var(--gold-soft);
+}
+
+.share-rule .divider {
+  width: 200px;
+  margin: 0 auto;
+}
+
+.share-block--defi .share-icon {
+  color: var(--wine);
+  margin-bottom: 2px;
+}
+
+.share-challenge {
+  font-style: italic;
+  font-weight: 500;
+  font-size: 38px;
+  line-height: 1.5;
+  color: var(--ink);
+}
+
+.share-foot {
+  margin-top: 56px;
+  font-style: italic;
+  font-size: 25px;
+  color: var(--gold);
 }
 
 @media (prefers-reduced-motion: reduce) {

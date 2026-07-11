@@ -83,6 +83,27 @@ export function ShareIcon({ size = 20 }: { size?: number }) {
   );
 }
 
+/* Télécharger : flèche vers un plateau */
+export function DownloadIcon({ size = 20 }: { size?: number }) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.6"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden
+    >
+      <path d="M12 3v11" />
+      <path d="M8 10.5l4 4 4-4" />
+      <path d="M5 20.5h14" />
+    </svg>
+  );
+}
+
 /* Coche : confirmation « copié » */
 export function CheckIcon({ size = 20 }: { size?: number }) {
   return (
