@@ -1418,6 +1418,174 @@ button {
   place-items: center;
 }
 
+/* =========================== pétales & fleurs ============================= */
+
+.petals {
+  position: fixed;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.petal {
+  position: absolute;
+  will-change: transform, opacity;
+}
+
+.petal--burst {
+  left: 50%;
+  top: 44%;
+}
+
+.petal:not(.petal--burst) {
+  top: 0;
+}
+
+.petal svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  filter: drop-shadow(0 2px 3px rgba(120, 40, 50, 0.18));
+}
+
+/* roses en coin des cartes (filigrane) */
+.flora {
+  position: absolute;
+  width: 64px;
+  height: 64px;
+  z-index: 0;
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.flora svg {
+  width: 100%;
+  height: 100%;
+}
+
+.flora--tl {
+  top: -8px;
+  left: -8px;
+  transform: rotate(-15deg);
+}
+
+.flora--br {
+  bottom: -8px;
+  right: -8px;
+  transform: rotate(165deg);
+}
+
+/* les cartes-messages rognent joliment les roses de coin */
+.verse-card,
+.sheet,
+.share-card {
+  overflow: hidden;
+}
+
+.verse-card > *:not(.flora),
+.sheet > *:not(.flora),
+.share-card > *:not(.flora):not(.share-frame) {
+  position: relative;
+  z-index: 1;
+}
+
+.share-card .flora {
+  width: 150px;
+  height: 150px;
+  opacity: 0.55;
+}
+
+.share-card .flora--tl {
+  top: -16px;
+  left: -16px;
+}
+
+.share-card .flora--br {
+  bottom: -16px;
+  right: -16px;
+}
+
+/* fleurs décoratives sur la page d'accueil */
+.feast-flora {
+  position: absolute;
+  z-index: 0;
+  opacity: 0.4;
+  pointer-events: none;
+}
+
+.feast-flora--1 {
+  top: 128px;
+  left: -34px;
+  transform: rotate(-22deg);
+}
+
+.feast-flora--2 {
+  top: 900px;
+  right: -44px;
+  transform: rotate(158deg);
+}
+
+.feast .eyebrow {
+  font-weight: 800;
+}
+
+/* ---- carrousel du lightbox ---- */
+
+.lightbox-nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 46px;
+  height: 46px;
+  border-radius: 999px;
+  border: 1px solid rgba(246, 234, 210, 0.4);
+  background: rgba(0, 0, 0, 0.28);
+  color: #f6ead2;
+  font-size: 2rem;
+  line-height: 1;
+  display: grid;
+  place-items: center;
+  z-index: 2;
+}
+
+.lightbox-prev {
+  left: 12px;
+}
+
+.lightbox-next {
+  right: 12px;
+}
+
+.lightbox-fig {
+  cursor: grab;
+  touch-action: pan-y;
+}
+
+.lightbox-fig:active {
+  cursor: grabbing;
+}
+
+.lightbox-dots {
+  display: flex;
+  gap: 9px;
+}
+
+.lightbox-dots button {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  border: none;
+  padding: 0;
+  background: rgba(246, 234, 210, 0.4);
+  transition: background 0.25s, transform 0.25s;
+}
+
+.lightbox-dots button.on {
+  background: #f6ead2;
+  transform: scale(1.25);
+}
+
 @media (prefers-reduced-motion: reduce) {
   * {
     animation-duration: 0.001ms !important;

@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { ChapelOrnament } from "./icons";
+import RosePetals, { RoseSprig } from "./flowers";
 
 const easeOut = [0.22, 1, 0.36, 1] as const;
 
@@ -18,19 +19,21 @@ const PHOTOS = [
 /* Carte-photo cliquable (agrandissement) avec repli si le fichier manque. */
 function FeastCard({
   photo,
+  index,
   rot,
   onOpen,
 }: {
   photo: Photo;
+  index: number;
   rot: number;
-  onOpen: (p: Photo) => void;
+  onOpen: (i: number) => void;
 }) {
   const [ok, setOk] = useState(true);
   return (
     <figure
       className="feast-card"
       style={{ "--rot": `${rot}deg` } as React.CSSProperties}
-      onClick={ok ? () => onOpen(photo) : undefined}
+      onClick={ok ? () => onOpen(index) : undefined}
       role={ok ? "button" : undefined}
       tabIndex={ok ? 0 : undefined}
       aria-label={ok ? `Agrandir la photo : ${photo.caption}` : undefined}
@@ -39,7 +42,7 @@ function FeastCard({
           ? (e) => {
               if (e.key === "Enter" || e.key === " ") {
                 e.preventDefault();
-                onOpen(photo);
+                onOpen(index);
               }
             }
           : undefined
@@ -79,8 +82,13 @@ const POINTS = [
 export default function IntroFeast({ onStart }: { onStart: () => void }) {
   const scrollRef = useRef<HTMLDivElement>(null);
   const ctaRef = useRef<HTMLButtonElement>(null);
-  const [zoom, setZoom] = useState<Photo | null>(null);
+  const [zoomIndex, setZoomIndex] = useState<number | null>(null);
   const [ctaVisible, setCtaVisible] = useState(false);
+
+  const go = (dir: number) =>
+    setZoomIndex((i) =>
+      i === null ? i : (i + dir + PHOTOS.length) % PHOTOS.length,
+    );
 
   /* le bouton flotte tant que le vrai bouton (en bas) n'est pas à l'écran */
   useEffect(() => {
@@ -94,6 +102,19 @@ export default function IntroFeast({ onStart }: { onStart: () => void }) {
     io.observe(target);
     return () => io.disconnect();
   }, []);
+
+  /* navigation clavier dans le carrousel */
+  useEffect(() => {
+    if (zoomIndex === null) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setZoomIndex(null);
+      else if (e.key === "ArrowRight") go(1);
+      else if (e.key === "ArrowLeft") go(-1);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [zoomIndex]);
 
   const rise = (delay = 0) => ({
     initial: { opacity: 0, y: 24, filter: "blur(6px)" },
@@ -110,6 +131,7 @@ export default function IntroFeast({ onStart }: { onStart: () => void }) {
 
   return (
     <>
+    <RosePetals />
     <motion.section
       className="feast"
       ref={scrollRef}
@@ -127,6 +149,14 @@ export default function IntroFeast({ onStart }: { onStart: () => void }) {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.7, delay: 0.1, ease: easeOut }}
       />
+
+      {/* fleurs décoratives de part et d'autre */}
+      <span className="feast-flora feast-flora--1" aria-hidden>
+        <RoseSprig size={104} />
+      </span>
+      <span className="feast-flora feast-flora--2" aria-hidden>
+        <RoseSprig size={128} />
+      </span>
 
       <div className="feast-inner">
         <motion.div className="feast-ornament" {...rise(0.15)}>
@@ -147,8 +177,9 @@ export default function IntroFeast({ onStart }: { onStart: () => void }) {
             <FeastCard
               key={p.src}
               photo={p}
+              index={i}
               rot={[-5, -1.5, 2, 5][i] ?? 0}
-              onOpen={setZoom}
+              onOpen={setZoomIndex}
             />
           ))}
         </motion.div>
@@ -187,7 +218,7 @@ export default function IntroFeast({ onStart }: { onStart: () => void }) {
 
     <div className="feast-float-wrap">
       <AnimatePresence>
-        {!ctaVisible && !zoom && (
+        {!ctaVisible && zoomIndex === null && (
           <motion.button
             type="button"
             className="cta feast-float-cta"
@@ -204,32 +235,82 @@ export default function IntroFeast({ onStart }: { onStart: () => void }) {
     </div>
 
     <AnimatePresence>
-      {zoom && (
+      {zoomIndex !== null && (
         <motion.div
           className="lightbox"
-          onClick={() => setZoom(null)}
+          onClick={() => setZoomIndex(null)}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.3 }}
         >
+          <button
+            type="button"
+            className="lightbox-nav lightbox-prev"
+            aria-label="Photo précédente"
+            onClick={(e) => {
+              e.stopPropagation();
+              go(-1);
+            }}
+          >
+            ‹
+          </button>
+
           <motion.figure
             className="lightbox-fig"
-            initial={{ scale: 0.85, opacity: 0, y: 12 }}
-            animate={{ scale: 1, opacity: 1, y: 0 }}
-            exit={{ scale: 0.9, opacity: 0 }}
-            transition={{ duration: 0.4, ease: easeOut }}
             onClick={(e) => e.stopPropagation()}
+            drag="x"
+            dragConstraints={{ left: 0, right: 0 }}
+            dragElastic={0.18}
+            onDragEnd={(_, info) => {
+              if (info.offset.x < -60) go(1);
+              else if (info.offset.x > 60) go(-1);
+            }}
           >
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={zoom.src} alt={zoom.alt} />
-            <figcaption>{zoom.caption}</figcaption>
+            <AnimatePresence mode="wait">
+              <motion.img
+                key={zoomIndex}
+                src={PHOTOS[zoomIndex].src}
+                alt={PHOTOS[zoomIndex].alt}
+                draggable={false}
+                initial={{ opacity: 0, x: 36 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -36 }}
+                transition={{ duration: 0.28, ease: easeOut }}
+              />
+            </AnimatePresence>
+            <figcaption>{PHOTOS[zoomIndex].caption}</figcaption>
           </motion.figure>
+
+          <button
+            type="button"
+            className="lightbox-nav lightbox-next"
+            aria-label="Photo suivante"
+            onClick={(e) => {
+              e.stopPropagation();
+              go(1);
+            }}
+          >
+            ›
+          </button>
+
+          <div className="lightbox-dots" onClick={(e) => e.stopPropagation()}>
+            {PHOTOS.map((_, i) => (
+              <button
+                key={i}
+                type="button"
+                className={i === zoomIndex ? "on" : ""}
+                aria-label={`Photo ${i + 1}`}
+                onClick={() => setZoomIndex(i)}
+              />
+            ))}
+          </div>
+
           <button
             type="button"
             className="lightbox-close"
             aria-label="Fermer"
-            onClick={() => setZoom(null)}
+            onClick={() => setZoomIndex(null)}
           >
             ×
           </button>

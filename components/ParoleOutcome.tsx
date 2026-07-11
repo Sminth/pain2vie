@@ -12,6 +12,7 @@ import {
   ShareIcon,
 } from "./icons";
 import ShareCard from "./ShareCard";
+import { CornerFlora } from "./flowers";
 
 const easeOut = [0.22, 1, 0.36, 1] as const;
 
@@ -159,6 +160,7 @@ export default function ParoleOutcome({
           animate={{ opacity: 1, scale: 1, y: 0 }}
           transition={{ duration: 0.75, ease: easeOut }}
         >
+          <CornerFlora />
           <span className="verse-card-icon">
             <CardIconGlyph icon={card.icon} size={30} />
           </span>
@@ -240,6 +242,7 @@ export default function ParoleOutcome({
                 transition={{ duration: 0.5, ease: easeOut }}
                 onClick={(e) => e.stopPropagation()}
               >
+                <CornerFlora />
                 <span className="ornament" style={{ color: "var(--wine)" }}>
                   <CardIconGlyph icon={card.icon} size={36} />
                 </span>

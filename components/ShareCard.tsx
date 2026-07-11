@@ -1,6 +1,7 @@
 import { forwardRef } from "react";
 import type { HolyCard } from "@/data/cards";
 import { CardIconGlyph, ChapelOrnament, Divider } from "./icons";
+import { CornerFlora } from "./flowers";
 
 /* Carte téléchargeable (parole + défi) rendue hors écran à taille fixe.
  * Uniquement du CSS + SVG inline (aucune image externe) pour une capture fiable. */
@@ -9,6 +10,7 @@ const ShareCard = forwardRef<HTMLDivElement, { card: HolyCard }>(
     return (
       <div ref={ref} className="share-card">
         <div className="share-frame" />
+        <CornerFlora />
 
         <div className="share-head">
           <span className="share-emblem">
