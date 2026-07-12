@@ -140,30 +140,50 @@ function PotFlower({ size = 30, color = "#d4747f" }: { size?: number; color?: st
   );
 }
 
+/* pétales qui tombent dans le pot (position, couleur, cadence) */
+const POT_DROPS = [
+  { left: 30, color: "#e7a9af", delay: 0 },
+  { left: 44, color: "#d97f89", delay: 1.05 },
+  { left: 56, color: "#c05b68", delay: 0.5 },
+  { left: 68, color: "#e4b7a4", delay: 1.7 },
+];
+
+/* fleurs qui éclosent (grandissent) dans le pot — tailles bien variées.
+ * Chaque pétale qui atteint le pot « devient » l'une de ces fleurs. */
+const POT_BLOOMS = [
+  { left: 30, size: 18, color: "#e7a9af", delay: 0.2, dur: 5.0 },
+  { left: 42, size: 32, color: "#d4747f", delay: 1.1, dur: 5.6 },
+  { left: 50, size: 24, color: "#c05b68", delay: 2.0, dur: 5.2 },
+  { left: 58, size: 36, color: "#b8414e", delay: 0.7, dur: 6.0 },
+  { left: 66, size: 20, color: "#d97f89", delay: 2.7, dur: 4.8 },
+  { left: 37, size: 27, color: "#e4b7a4", delay: 3.4, dur: 5.4 },
+];
+
 /* contenu visuel du bouton « pot de fleur » (partagé bouton fixe / flottant) */
 export function PotButtonContent() {
   return (
     <>
       <span className="pot-scene" aria-hidden>
-        <span className="pot-drop pot-drop--1">
-          <Petal color="#e7a9af" />
-        </span>
-        <span className="pot-drop pot-drop--2">
-          <Petal color="#d97f89" />
-        </span>
-        <span className="pot-drop pot-drop--3">
-          <Petal color="#c05b68" />
-        </span>
+        {POT_DROPS.map((d, i) => (
+          <span
+            key={i}
+            className="pot-drop"
+            style={{ left: `${d.left}%`, animationDelay: `${d.delay}s` }}
+          >
+            <Petal color={d.color} />
+          </span>
+        ))}
         <span className="pot-flowers">
-          <span className="pot-flower pot-flower--b">
-            <PotFlower size={22} color="#e7a9af" />
-          </span>
-          <span className="pot-flower pot-flower--a">
-            <PotFlower size={30} color="#d4747f" />
-          </span>
-          <span className="pot-flower pot-flower--c">
-            <PotFlower size={20} color="#c05b68" />
-          </span>
+          {POT_BLOOMS.map((f, i) => (
+            <span key={i} className="pot-flower" style={{ left: `${f.left}%` }}>
+              <span
+                className="pot-flower-grow"
+                style={{ animationDelay: `${f.delay}s`, animationDuration: `${f.dur}s` }}
+              >
+                <PotFlower size={f.size} color={f.color} />
+              </span>
+            </span>
+          ))}
         </span>
       </span>
       <span className="pot-body">
