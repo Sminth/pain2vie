@@ -171,6 +171,9 @@ export default function IntroFeast({ onStart }: { onStart: () => void }) {
         <motion.p className="feast-date" {...rise(0.4)}>
           Dimanche 12 juillet 2026
         </motion.p>
+        <motion.p className="feast-note" {...rise(0.46)}>
+          Jour anniversaire de leur mariage&nbsp;(12 juillet 1858)
+        </motion.p>
 
         <motion.div className="feast-cards" {...rise(0.46)}>
           {PHOTOS.map((p, i) => (

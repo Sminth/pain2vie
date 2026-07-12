@@ -948,6 +948,15 @@ button {
   color: var(--gold);
 }
 
+.feast-note {
+  margin-top: 4px;
+  font-family: var(--font-serif), Georgia, serif;
+  font-style: italic;
+  font-size: 0.86rem;
+  color: var(--ink-soft);
+  text-wrap: balance;
+}
+
 /* bouton flottant tant qu'on n'a pas atteint le vrai bouton en bas */
 .feast-float-wrap {
   position: fixed;
@@ -1590,6 +1599,8 @@ button {
 
 .pot-btn {
   position: relative;
+  z-index: 4;
+  pointer-events: auto;
   border: none;
   background: none;
   padding: 0;
