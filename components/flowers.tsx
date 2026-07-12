@@ -124,6 +124,56 @@ export default function RosePetals() {
   );
 }
 
+/* fleur sur tige qui sort du pot */
+function PotFlower({ size = 30, color = "#d4747f" }: { size?: number; color?: string }) {
+  return (
+    <svg width={size} height={size * 1.5} viewBox="0 0 30 46" fill="none" aria-hidden>
+      <path d="M15 46C15 34 15 24 15 15" stroke="#8ea36a" strokeWidth="2.4" strokeLinecap="round" />
+      <path d="M15 30C9 28 6 23 8 18C13 19 16 24 15 30Z" fill="#9cb87a" />
+      <g transform="translate(15 11)">
+        {[0, 72, 144, 216, 288].map((a) => (
+          <ellipse key={a} cx="0" cy="-6" rx="4.6" ry="7" fill={color} transform={`rotate(${a})`} />
+        ))}
+        <circle cx="0" cy="0" r="3.4" fill="#e6b463" />
+      </g>
+    </svg>
+  );
+}
+
+/* contenu visuel du bouton « pot de fleur » (partagé bouton fixe / flottant) */
+export function PotButtonContent() {
+  return (
+    <>
+      <span className="pot-scene" aria-hidden>
+        <span className="pot-drop pot-drop--1">
+          <Petal color="#e7a9af" />
+        </span>
+        <span className="pot-drop pot-drop--2">
+          <Petal color="#d97f89" />
+        </span>
+        <span className="pot-drop pot-drop--3">
+          <Petal color="#c05b68" />
+        </span>
+        <span className="pot-flowers">
+          <span className="pot-flower pot-flower--b">
+            <PotFlower size={22} color="#e7a9af" />
+          </span>
+          <span className="pot-flower pot-flower--a">
+            <PotFlower size={30} color="#d4747f" />
+          </span>
+          <span className="pot-flower pot-flower--c">
+            <PotFlower size={20} color="#c05b68" />
+          </span>
+        </span>
+      </span>
+      <span className="pot-body">
+        <span className="pot-rim" aria-hidden />
+        <span className="pot-label">Reçois ta pétale du jour</span>
+      </span>
+    </>
+  );
+}
+
 /* petite rose + feuilles, motif de coin des cartes et de la page */
 export function RoseSprig({ size = 70 }: { size?: number }) {
   return (

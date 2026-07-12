@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { ChapelOrnament } from "./icons";
-import RosePetals, { RoseSprig } from "./flowers";
+import RosePetals, { PotButtonContent, RoseSprig } from "./flowers";
 
 const easeOut = [0.22, 1, 0.36, 1] as const;
 
@@ -209,8 +209,13 @@ export default function IntroFeast({ onStart }: { onStart: () => void }) {
           <p className="feast-cta-lead">Et toi, cette semaine&nbsp;?</p>
           <p className="feast-question">Quelle parole t’accompagne cette semaine&nbsp;?</p>
           <p className="feast-question">Quel est ton défi de la semaine&nbsp;?</p>
-          <button className="cta" ref={ctaRef} onClick={onStart}>
-            Recevoir ma parole
+          <button
+            className="pot-btn"
+            ref={ctaRef}
+            onClick={onStart}
+            aria-label="Reçois ta pétale du jour"
+          >
+            <PotButtonContent />
           </button>
         </motion.div>
       </div>
@@ -221,14 +226,15 @@ export default function IntroFeast({ onStart }: { onStart: () => void }) {
         {!ctaVisible && zoomIndex === null && (
           <motion.button
             type="button"
-            className="cta feast-float-cta"
+            className="pot-btn pot-btn--float"
             onClick={onStart}
+            aria-label="Reçois ta pétale du jour"
             initial={{ opacity: 0, y: 24 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 24 }}
             transition={{ duration: 0.35, ease: easeOut }}
           >
-            Recevoir ma parole
+            <PotButtonContent />
           </motion.button>
         )}
       </AnimatePresence>
