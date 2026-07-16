@@ -1757,6 +1757,933 @@ button {
   height: 40px;
 }
 
+/* ============================ cadeau (Thanksgiving) ======================= */
+
+.gift-trigger {
+  position: fixed;
+  top: max(12px, env(safe-area-inset-top));
+  right: 12px;
+  z-index: 20;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  width: 92px;
+  padding: 10px 6px 8px;
+  text-decoration: none;
+  border-radius: 18px;
+  transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.gift-trigger:hover {
+  transform: translateY(-2px);
+}
+
+.gift-trigger-glow {
+  position: absolute;
+  inset: 4px 8px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(192, 91, 104, 0.5), transparent 70%);
+  filter: blur(5px);
+  z-index: -1;
+}
+
+.gift-trigger-box {
+  position: relative;
+  filter: drop-shadow(0 8px 14px rgba(72, 16, 25, 0.35));
+}
+
+.gift-trigger-label {
+  font-size: 0.64rem;
+  letter-spacing: 0.03em;
+  font-weight: 700;
+  color: var(--wine-ink);
+  text-align: center;
+  line-height: 1.2;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.6);
+}
+
+.gift-close {
+  position: fixed;
+  top: max(14px, env(safe-area-inset-top));
+  left: 14px;
+  z-index: 20;
+  width: 38px;
+  height: 38px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  border: 1px solid var(--gold-line);
+  background: rgba(253, 250, 242, 0.85);
+  color: var(--wine-ink);
+  font-size: 1.3rem;
+  line-height: 1;
+  text-decoration: none;
+}
+
+/* --------------------------- composition du cadeau ------------------------- */
+
+.gift-compose {
+  position: absolute;
+  inset: 0;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.gift-step {
+  max-width: 640px;
+  margin: 0 auto;
+  padding: clamp(70px, 12vh, 96px) 22px 60px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.gift-step-title {
+  font-family: var(--font-serif), Georgia, serif;
+  font-weight: 500;
+  font-size: clamp(1.8rem, 6.5vw, 2.5rem);
+  color: var(--wine-ink);
+  margin: 10px 0 8px;
+  text-wrap: balance;
+}
+
+.gift-step-lede {
+  font-family: var(--font-serif), Georgia, serif;
+  font-style: italic;
+  color: var(--ink-soft);
+  max-width: 40ch;
+  margin-bottom: 8px;
+}
+
+/* cartes à thème */
+
+.gift-cards {
+  width: 100%;
+  margin-top: 28px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 14px;
+}
+
+.gift-card-face {
+  position: relative;
+  border-radius: 18px;
+  padding: 20px 14px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  text-align: center;
+}
+
+.gift-card-face--front {
+  min-height: 170px;
+  color: #fff6ea;
+  box-shadow:
+    0 18px 32px -14px rgba(72, 16, 25, 0.45),
+    inset 0 1px 0 rgba(255, 255, 255, 0.25);
+  transition: transform 0.3s ease;
+}
+
+.gift-card-face--front:hover {
+  transform: translateY(-3px);
+}
+
+.gift-card-mark {
+  font-size: 1.1rem;
+  opacity: 0.85;
+}
+
+.gift-card-title {
+  font-family: var(--font-serif), Georgia, serif;
+  font-size: 1.02rem;
+  font-weight: 500;
+  line-height: 1.3;
+  text-wrap: balance;
+}
+
+.gift-card-single {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-top: 28px;
+  perspective: 1200px;
+}
+
+.gift-card-face--back {
+  width: min(92vw, 420px);
+  min-height: 320px;
+  border: 1.5px solid;
+  background: radial-gradient(120% 100% at 50% 0%, #fffdf8, var(--card-face) 58%, #f4ecd7);
+  box-shadow:
+    0 30px 60px -20px rgba(50, 30, 14, 0.5),
+    inset 0 0 0 1px rgba(169, 130, 47, 0.25);
+  padding: 30px 26px 24px;
+}
+
+.gift-card-back-title {
+  font-family: var(--font-serif), Georgia, serif;
+  font-style: italic;
+  font-weight: 600;
+  font-size: 1rem;
+}
+
+.gift-textarea {
+  width: 100%;
+  flex: 1;
+  min-height: 120px;
+  resize: none;
+  border: none;
+  background: transparent;
+  font-family: var(--font-sans), sans-serif;
+  font-size: 0.95rem;
+  color: var(--ink);
+  text-align: center;
+  line-height: 1.55;
+}
+
+.gift-textarea:focus {
+  outline: none;
+}
+
+.gift-textarea::placeholder {
+  color: var(--ink-soft);
+  opacity: 0.7;
+}
+
+.gift-card-back-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 8px;
+}
+
+/* choix du style d'envoi */
+
+.gift-style-grid {
+  width: 100%;
+  margin-top: 26px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+  gap: 16px;
+}
+
+/* la puce EST la carte-aperçu : plus de cadre neutre autour d'une icône,
+ * l'animation remplit toute la surface, avec une légende en incrustation. */
+
+.gift-style-chip {
+  position: relative;
+  height: 184px;
+  border-radius: 18px;
+  border: 1px solid var(--gold-line);
+  overflow: hidden;
+  transition: transform 0.25s, box-shadow 0.25s;
+}
+
+.gift-style-chip:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 16px 30px -16px rgba(40, 24, 12, 0.4);
+}
+
+.gift-style-chip--on {
+  outline: 2px solid var(--gold);
+  outline-offset: -2px;
+}
+
+.gift-style-chip--envelope {
+  background: linear-gradient(160deg, #241b17, #120d0a);
+}
+
+.gift-style-chip--plane {
+  background: linear-gradient(160deg, #f0ece1, #d9d0bd);
+}
+
+.gift-style-chip--flower {
+  background: linear-gradient(160deg, #f2ece3, #e2d3c2);
+}
+
+.gift-style-chip--burning {
+  background: linear-gradient(160deg, #1c1210, #0a0605);
+}
+
+.gift-style-chip--parchment {
+  background: linear-gradient(160deg, #2b1f16, #140d09);
+}
+
+.gift-style-chip--hearts {
+  background: linear-gradient(160deg, #f2e7e0, #ddc4bb);
+}
+
+.gift-style-caption {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 6;
+  padding: 22px 10px 12px;
+  text-align: center;
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-weight: 700;
+  color: #f6ead2;
+  background: linear-gradient(180deg, transparent, rgba(20, 12, 8, 0.62) 55%);
+}
+
+/* aperçus animés en boucle : c'est la carte (avec ses lignes de titre) qui
+ * se transforme réellement d'un style à l'autre. Centrage par marges (pas
+ * de transform statique) pour rester correct même animé via framer-motion. */
+
+.gsp {
+  position: absolute;
+  inset: 0;
+  perspective: 480px;
+}
+
+.gsp-card {
+  position: relative;
+  width: 100px;
+  height: 68px;
+  border-radius: 8px;
+  box-shadow:
+    0 10px 18px -8px rgba(50, 20, 10, 0.4),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.3);
+}
+
+.gsp-card-line {
+  position: absolute;
+  left: 16px;
+  height: 3px;
+  border-radius: 2px;
+  background: rgba(255, 255, 255, 0.6);
+}
+
+.gsp-card-line--1 {
+  top: 18px;
+  width: 66px;
+}
+
+.gsp-card-line--2 {
+  top: 29px;
+  width: 42px;
+}
+
+/* enveloppe : pochette SVG (plis réels) + carte qui s'enfonce vraiment dedans */
+
+.gsp-envelope {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin-top: -59px;
+  margin-left: -76px;
+  width: 152px;
+  height: 118px;
+  perspective: 480px;
+}
+
+.gsp-envelope-shadow {
+  position: absolute;
+  left: 50%;
+  bottom: -6px;
+  margin-left: -56px;
+  width: 112px;
+  height: 16px;
+  border-radius: 50%;
+  background: radial-gradient(ellipse, rgba(0, 0, 0, 0.5), transparent 72%);
+  z-index: 0;
+}
+
+.gsp-envelope-pocket {
+  position: absolute;
+  inset: 0;
+  width: 152px;
+  height: 118px;
+  z-index: 1;
+  filter: drop-shadow(0 10px 16px rgba(0, 0, 0, 0.4));
+}
+
+.gsp-card-slide {
+  position: absolute !important;
+  left: 50%;
+  margin-left: -50px;
+  bottom: 18px;
+  z-index: 2;
+}
+
+.gsp-envelope-flap {
+  position: absolute !important;
+  top: 16px;
+  left: 50%;
+  margin-left: -76px;
+  width: 152px;
+  height: 74px;
+  transform-origin: top center;
+  z-index: 3;
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.45));
+}
+
+.gsp-envelope-seal {
+  position: absolute !important;
+  left: 50%;
+  top: 54px;
+  width: 20px;
+  height: 20px;
+  margin-left: -10px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, #c9707c, #7a1d2c);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+  z-index: 4;
+}
+
+/* avion : la carte se plie (morph du clip-path) puis s'envole */
+
+.gsp-plane-shape {
+  position: absolute !important;
+  top: 50%;
+  left: 50%;
+  margin-top: -34px;
+  margin-left: -50px;
+  z-index: 2;
+}
+
+.gsp-plane-in {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin-top: -34px;
+  margin-left: -50px;
+  z-index: 1;
+}
+
+/* carte fleurie : la carte s'efface derrière une rose qui éclot */
+
+.gsp-flower-card {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin-top: -34px;
+  margin-left: -50px;
+  z-index: 1;
+}
+
+.gsp-rose {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin-top: -48px;
+  margin-left: -32px;
+  width: 64px;
+  height: 96px;
+  z-index: 2;
+  filter: drop-shadow(0 6px 10px rgba(72, 16, 25, 0.28));
+}
+
+/* carte qui brûle : la carte se consume du bas vers le haut */
+
+.gsp-burning {
+  position: absolute;
+  inset: 0;
+}
+
+.gsp-burn-glow {
+  position: absolute;
+  left: 50%;
+  bottom: 8%;
+  width: 150px;
+  height: 84px;
+  margin-left: -75px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(242, 161, 60, 0.4), transparent 70%);
+  filter: blur(6px);
+  z-index: 0;
+}
+
+.gsp-burn-ash {
+  position: absolute;
+  left: 50%;
+  bottom: 8%;
+  width: 100px;
+  height: 26px;
+  margin-left: -50px;
+  z-index: 1;
+}
+
+.gsp-burn-card {
+  position: absolute !important;
+  top: 50%;
+  left: 50%;
+  margin-top: -34px;
+  margin-left: -50px;
+  z-index: 1;
+}
+
+.gsp-flame-track {
+  position: absolute;
+  transform: translateX(-50%);
+  z-index: 2;
+}
+
+.gsp-ember {
+  position: absolute;
+  bottom: 22%;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: #f2a13c;
+  box-shadow: 0 0 6px 1px rgba(242, 161, 60, 0.7);
+  z-index: 2;
+}
+
+/* parchemin : la carte se déroule entre deux rouleaux */
+
+.gsp-parchment {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin-top: -48px;
+  margin-left: -76px;
+  width: 152px;
+  height: 96px;
+}
+
+.gsp-parchment-shadow {
+  position: absolute;
+  left: 50%;
+  bottom: -8px;
+  margin-left: -56px;
+  width: 112px;
+  height: 14px;
+  border-radius: 50%;
+  background: radial-gradient(ellipse, rgba(0, 0, 0, 0.4), transparent 70%);
+}
+
+.gsp-parchment-sheet {
+  position: absolute !important;
+  top: 50%;
+  left: 50%;
+  margin-top: -42px;
+  margin-left: -65px;
+  width: 130px;
+  height: 84px;
+  transform-origin: center;
+  z-index: 1;
+}
+
+.gsp-parchment-svg {
+  position: absolute;
+  inset: 0;
+  width: 130px;
+  height: 84px;
+  filter: drop-shadow(0 6px 10px rgba(0, 0, 0, 0.35));
+}
+
+.gsp-parchment-roll {
+  position: absolute;
+  top: 4px;
+  bottom: 4px;
+  width: 16px;
+  border-radius: 8px;
+  overflow: hidden;
+  background: linear-gradient(90deg, #f3e6c0 0%, #cdae74 22%, #7d5f38 50%, #cdae74 78%, #f3e6c0 100%);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+  z-index: 2;
+}
+
+.gsp-parchment-roll--left {
+  left: 0;
+}
+
+.gsp-parchment-roll--right {
+  right: 0;
+}
+
+/* texture qui défile pour donner l'illusion d'un rouleau qui tourne vraiment */
+.gsp-parchment-roll-spin {
+  position: absolute;
+  inset: -30% 0;
+  background-image: repeating-linear-gradient(
+    180deg,
+    rgba(0, 0, 0, 0.18) 0px,
+    rgba(0, 0, 0, 0.18) 2px,
+    transparent 2px,
+    transparent 9px
+  );
+  mix-blend-mode: multiply;
+  opacity: 0.8;
+}
+
+.gsp-parchment-seal {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 18px;
+  height: 18px;
+  margin-left: -9px;
+  margin-top: -9px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, #e8c33c, #b9930e);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+  z-index: 2;
+}
+
+.gsp-card-line.gsp-card-line--ink {
+  background: rgba(90, 60, 30, 0.55);
+}
+
+/* pluie de cœurs : beaucoup de cœurs qui tombent et dérivent en continu */
+
+.gsp-hearts {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+.ghearts-drop {
+  position: absolute;
+  top: 0;
+  filter: drop-shadow(0 2px 3px rgba(72, 16, 25, 0.2));
+}
+
+.gsp-hearts-card {
+  position: absolute !important;
+  top: 50%;
+  left: 50%;
+  margin-top: -34px;
+  margin-left: -50px;
+  z-index: 1;
+}
+
+.ghearts-burst {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  filter: drop-shadow(0 2px 3px rgba(72, 16, 25, 0.25));
+}
+
+.gift-back {
+  margin-top: 26px;
+}
+
+/* aperçu + partage */
+
+.gift-preview {
+  position: relative;
+  width: min(88vw, 380px);
+  padding: 28px 24px;
+  border-radius: 20px;
+  margin-top: 26px;
+  color: #fff6ea;
+  box-shadow:
+    0 22px 44px -18px rgba(72, 16, 25, 0.5),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  text-align: center;
+}
+
+.gift-preview-icon {
+  display: inline-flex;
+  margin-bottom: 10px;
+  opacity: 0.9;
+}
+
+.gift-preview-title {
+  font-family: var(--font-serif), Georgia, serif;
+  font-weight: 600;
+  font-size: 0.95rem;
+  margin-bottom: 10px;
+  opacity: 0.9;
+}
+
+.gift-preview-msg {
+  font-family: var(--font-serif), Georgia, serif;
+  font-style: italic;
+  font-size: clamp(1.05rem, 4vw, 1.25rem);
+  line-height: 1.5;
+  white-space: pre-wrap;
+  text-wrap: balance;
+}
+
+/* ------------------------- animations d'ouverture -------------------------- */
+
+.gift-reveal-scene {
+  overflow: hidden;
+}
+
+.gopen-stage {
+  position: relative;
+  width: 100%;
+  max-width: 440px;
+  min-height: 320px;
+  display: grid;
+  place-items: center;
+}
+
+.gopen-stage > * {
+  grid-column: 1;
+  grid-row: 1;
+}
+
+.gopen-note {
+  position: relative;
+  width: min(84vw, 360px);
+  padding: 26px 22px;
+  border-radius: 20px;
+  border: 1.5px solid;
+  background: radial-gradient(120% 100% at 50% 0%, #fffdf8, var(--card-face) 58%, #f4ecd7);
+  box-shadow:
+    0 30px 60px -20px rgba(50, 30, 14, 0.45),
+    inset 0 0 0 1px rgba(169, 130, 47, 0.25);
+  text-align: center;
+}
+
+.gopen-note-title {
+  font-family: var(--font-serif), Georgia, serif;
+  font-style: italic;
+  font-weight: 600;
+  font-size: 0.95rem;
+  margin-bottom: 10px;
+}
+
+.gopen-note-msg {
+  font-family: var(--font-serif), Georgia, serif;
+  font-size: clamp(1.05rem, 4.2vw, 1.3rem);
+  line-height: 1.55;
+  color: var(--ink);
+  white-space: pre-wrap;
+  text-wrap: balance;
+}
+
+/* enveloppe */
+
+.gopen-envelope {
+  position: relative;
+  width: 220px;
+  height: 150px;
+  perspective: 900px;
+}
+
+.gopen-envelope-shadow {
+  position: absolute;
+  left: 50%;
+  bottom: -10px;
+  margin-left: -80px;
+  width: 160px;
+  height: 20px;
+  border-radius: 50%;
+  background: radial-gradient(ellipse, rgba(0, 0, 0, 0.35), transparent 72%);
+  z-index: 0;
+}
+
+.gopen-envelope-pocket {
+  position: absolute;
+  inset: 0;
+  width: 220px;
+  height: 150px;
+  z-index: 1;
+  filter: drop-shadow(0 14px 20px rgba(0, 0, 0, 0.35));
+}
+
+.gopen-envelope-flap {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 220px;
+  height: 96px;
+  transform-origin: top center;
+  z-index: 3;
+  filter: drop-shadow(0 6px 10px rgba(0, 0, 0, 0.4));
+}
+
+.gopen-envelope-seal {
+  position: absolute;
+  left: 50%;
+  top: 78px;
+  width: 26px;
+  height: 26px;
+  margin-left: -13px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, #c9707c, #7a1d2c);
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.5);
+  z-index: 4;
+}
+
+.gopen-envelope-letter {
+  position: absolute;
+  left: 50%;
+  top: 6px;
+  transform: translateX(-50%);
+  z-index: 2;
+}
+
+/* avion en papier */
+
+.gopen-plane {
+  position: relative;
+  z-index: 2;
+}
+
+.gopen-plane-note {
+  position: relative;
+  z-index: 1;
+}
+
+/* carte fleurie */
+
+.gopen-flower-ring {
+  position: relative;
+  width: 260px;
+  height: 260px;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.gopen-flower {
+  position: absolute;
+  transform: translate(-50%, -50%);
+}
+
+/* carte qui brûle */
+
+.gopen-burn-wrap {
+  position: relative;
+  display: grid;
+  place-items: center;
+}
+
+.gopen-hearts {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: grid;
+  place-items: center;
+}
+
+.gopen-burn-veil {
+  position: relative;
+  z-index: 1;
+}
+
+.gopen-burn-glow {
+  position: absolute;
+  left: 50%;
+  bottom: -10px;
+  width: 260px;
+  height: 140px;
+  margin-left: -130px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(242, 161, 60, 0.45), transparent 70%);
+  filter: blur(10px);
+  z-index: 0;
+}
+
+.gopen-burn-ash {
+  position: absolute;
+  left: 50%;
+  bottom: -6px;
+  width: min(84vw, 340px);
+  height: 30px;
+  margin-left: calc(min(84vw, 340px) / -2);
+  z-index: 0;
+}
+
+.gopen-flame-track {
+  position: absolute;
+  transform: translateX(-50%);
+  z-index: 2;
+}
+
+.gopen-ember {
+  position: absolute;
+  bottom: 0;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #f2a13c;
+  box-shadow: 0 0 8px 2px rgba(242, 161, 60, 0.7);
+  z-index: 2;
+}
+
+/* parchemin */
+
+.gopen-parchment {
+  position: relative;
+  display: inline-block;
+}
+
+.gopen-parchment-note-wrap {
+  position: relative;
+  z-index: 1;
+}
+
+/* fond kraft unique et continu (un seul dégradé, jamais coupé en deux) —
+ * la carte se révèle par-dessus via un clip-path, et les rouleaux restent
+ * collés pile à la limite de ce qui est encore « enroulé ». */
+.gopen-parchment-kraft {
+  position: absolute;
+  inset: 0;
+  border-radius: 20px;
+  background: linear-gradient(160deg, #f2e3bf, #c9a877);
+  box-shadow: inset 0 0 0 1px rgba(169, 130, 47, 0.4);
+  z-index: 0;
+}
+
+.gopen-parchment-roll {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 20px;
+  margin-left: -10px;
+  border-radius: 10px;
+  background: linear-gradient(180deg, #e8d9b0, #b89a5e);
+  box-shadow:
+    inset 0 0 0 1px rgba(169, 130, 47, 0.4),
+    0 4px 10px rgba(0, 0, 0, 0.35);
+  z-index: 2;
+}
+
+.gopen-parchment-roll--right {
+  margin-left: 0;
+  margin-right: -10px;
+}
+
+/* bouton « envoyer un cadeau à mon tour » */
+
+.gift-reveal-ui {
+  align-items: center;
+}
+
+.gift-again-btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 16px 30px;
+  border-radius: 999px;
+  background: linear-gradient(180deg, var(--wine), var(--wine-deep));
+  color: #f6ead2;
+  font-size: 0.82rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  font-weight: 600;
+  text-decoration: none;
+  box-shadow:
+    0 14px 34px -12px rgba(72, 16, 25, 0.55),
+    inset 0 1px 0 rgba(255, 255, 255, 0.18);
+}
+
+.gift-again-glow {
+  position: absolute;
+  inset: -8px;
+  border-radius: 999px;
+  background: radial-gradient(circle, rgba(201, 166, 89, 0.5), transparent 70%);
+  z-index: -1;
+}
+
+.gift-again-icon {
+  display: inline-flex;
+}
+
 @media (prefers-reduced-motion: reduce) {
   * {
     animation-duration: 0.001ms !important;

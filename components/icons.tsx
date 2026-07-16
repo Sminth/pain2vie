@@ -123,6 +123,134 @@ export function CheckIcon({ size = 20 }: { size?: number }) {
   );
 }
 
+/* Cadeau : boîte nouée d'un ruban — déclencheur du parcours cadeau */
+export function GiftIcon({ size = 22 }: { size?: number }) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.6"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden
+    >
+      <rect x="4" y="10" width="16" height="10" rx="1.4" />
+      <path d="M4 10h16v3.2H4z" />
+      <path d="M12 10v10" />
+      <path d="M12 10c-2.4 0-4.4-1.1-4.4-3.1S9 4.3 10.4 5.4C11.6 6.4 12 8 12 10Z" />
+      <path d="M12 10c2.4 0 4.4-1.1 4.4-3.1S14 4.3 12.6 5.4C11.4 6.4 12 8 12 10Z" />
+    </svg>
+  );
+}
+
+/* Enveloppe */
+export function EnvelopeIcon({ size = 22 }: { size?: number }) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.6"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden
+    >
+      <rect x="3.5" y="5.5" width="17" height="13" rx="1.8" />
+      <path d="M4 7l8 6.2L20 7" />
+    </svg>
+  );
+}
+
+/* Avion en papier */
+export function PaperPlaneIcon({ size = 22 }: { size?: number }) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.6"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden
+    >
+      <path d="M20.5 3.5 3 10.8l6.6 2.2 2.2 6.6L20.5 3.5Z" />
+      <path d="M9.6 13 20.5 3.5" />
+    </svg>
+  );
+}
+
+/* Fleur (choix « carte fleurie ») */
+export function FlowerIcon({ size = 22 }: { size?: number }) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden
+    >
+      <circle cx="12" cy="8.4" r="3.1" />
+      <circle cx="17" cy="12.4" r="3.1" />
+      <circle cx="12" cy="16.4" r="3.1" />
+      <circle cx="7" cy="12.4" r="3.1" />
+      <circle cx="12" cy="12.4" r="2" fill="currentColor" stroke="none" />
+    </svg>
+  );
+}
+
+/* Parchemin roulé */
+export function ParchmentIcon({ size = 22 }: { size?: number }) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.6"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden
+    >
+      <path d="M6 4.5c-1.4 0-2.5 1.1-2.5 2.5S4.6 9.5 6 9.5" />
+      <path d="M18 19.5c1.4 0 2.5-1.1 2.5-2.5S19.4 14.5 18 14.5" />
+      <path d="M6 4.5h12v10c0 2.8-2.2 5-5 5H6" />
+      <path d="M8.5 9h7" />
+      <path d="M8.5 12.4h7" />
+    </svg>
+  );
+}
+
+/* Cœur (choix « pluie de cœurs ») */
+export function HeartLineIcon({ size = 22 }: { size?: number }) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.6"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden
+    >
+      <path d="M12 20.3S4 15.3 4 9.5A4.5 4.5 0 0 1 12 6.8 4.5 4.5 0 0 1 20 9.5c0 5.8-8 10.8-8 10.8Z" />
+    </svg>
+  );
+}
+
 const ICON_PATHS: Record<CardIcon, React.ReactNode> = {
   flame: (
     <>

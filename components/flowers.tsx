@@ -125,7 +125,7 @@ export default function RosePetals() {
 }
 
 /* fleur sur tige qui sort du pot */
-function PotFlower({ size = 30, color = "#d4747f" }: { size?: number; color?: string }) {
+export function PotFlower({ size = 30, color = "#d4747f" }: { size?: number; color?: string }) {
   return (
     <svg width={size} height={size * 1.5} viewBox="0 0 30 46" fill="none" aria-hidden>
       <path d="M15 46C15 34 15 24 15 15" stroke="#8ea36a" strokeWidth="2.4" strokeLinecap="round" />
