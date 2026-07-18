@@ -3,6 +3,7 @@ export type GiftStyleId = "envelope" | "plane" | "flower" | "burning" | "parchme
 export interface GiftTheme {
   id: number;
   title: string;
+  emoji: string;
   color: string;
   colorDeep: string;
 }
@@ -13,11 +14,16 @@ export interface GiftStyle {
 }
 
 export const GIFT_THEMES: GiftTheme[] = [
-  { id: 1, title: "Remerciement pour ton travail", color: "#c9a659", colorDeep: "#a9822f" },
-  { id: 2, title: "Ta motivation", color: "#c05b68", colorDeep: "#8a2535" },
-  { id: 3, title: "Ta bienveillance", color: "#d4747f", colorDeep: "#b8414e" },
-  { id: 4, title: "Ta persévérance", color: "#c17a45", colorDeep: "#8f4f26" },
-  { id: 5, title: "Ce que tu représentes pour nous", color: "#8ea36a", colorDeep: "#5f7a3f" },
+  { id: 1, title: "Merci pour ton engagement", emoji: "🙏", color: "#c9a659", colorDeep: "#a9822f" },
+  { id: 2, title: "Tu es une bénédiction pour moi", emoji: "🕊️", color: "#c05b68", colorDeep: "#8a2535" },
+  {
+    id: 3,
+    title: "Te voir travailler dans le champ de Dieu m’inspire",
+    emoji: "🌾",
+    color: "#d4747f",
+    colorDeep: "#b8414e",
+  },
+  { id: 4, title: "Tu es un modèle", emoji: "⭐", color: "#c17a45", colorDeep: "#8f4f26" },
 ];
 
 export const GIFT_STYLES: GiftStyle[] = [

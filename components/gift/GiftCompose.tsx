@@ -159,7 +159,7 @@ export default function GiftCompose() {
                       whileTap={{ scale: 0.96 }}
                     >
                       <span className="gift-card-mark" aria-hidden>
-                        ✦
+                        {t.emoji}
                       </span>
                       <span className="gift-card-title">{t.title}</span>
                     </motion.button>
