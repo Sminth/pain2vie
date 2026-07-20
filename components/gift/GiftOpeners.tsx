@@ -57,9 +57,9 @@ function EnvelopeOpener({ theme, message, onDone }: OpenerProps) {
         <EnvelopePocket />
         <motion.div
           className="gopen-envelope-letter"
-          initial={{ y: 6, opacity: 0 }}
-          animate={{ y: -108, opacity: 1 }}
-          transition={{ delay: 1.15, duration: 0.85, ease: easeOut }}
+          initial={{ top: "48px", opacity: 0, scale: 0.88 }}
+          animate={{ top: "-108px", opacity: 1, scale: 1 }}
+          transition={{ delay: 1.15, duration: 0.95, ease: easeOut }}
         >
           <GiftNote theme={theme} message={message} />
         </motion.div>
@@ -150,7 +150,14 @@ function FlowerOpener({ theme, message, onDone }: OpenerProps) {
           <motion.span
             key={i}
             className="gopen-flower"
-            style={{ left: `${f.left}%`, top: `${f.top}%`, width: f.size, height: f.size }}
+            style={{
+              left: `${f.left}%`,
+              top: `${f.top}%`,
+              width: f.size,
+              height: f.size,
+              marginLeft: -f.size / 2,
+              marginTop: -f.size / 2,
+            }}
             initial={{ scale: 0, opacity: 0, rotate: -20 }}
             animate={{ scale: 1, opacity: 1, rotate: 0 }}
             transition={{ delay: f.delay, duration: 0.6, ease: easeOut }}
@@ -376,8 +383,8 @@ function EnvelopeSender({ theme, message, onDone }: OpenerProps) {
         <EnvelopePocket />
         <motion.div
           className="gopen-envelope-letter"
-          initial={{ y: -108, opacity: 1 }}
-          animate={{ y: 6, opacity: 0 }}
+          initial={{ top: "-108px", opacity: 1, scale: 1 }}
+          animate={{ top: "48px", opacity: 0, scale: 0.88 }}
           transition={{ delay: 0.55, duration: 0.8, ease: easeOut }}
         >
           <GiftNote theme={theme} message={message} />
@@ -472,7 +479,7 @@ function FlowerSender({ theme, message, onDone }: OpenerProps) {
           <motion.span
             key={i}
             className="gopen-flower"
-            style={{ width: f.size, height: f.size }}
+            style={{ width: f.size, height: f.size, marginLeft: -f.size / 2, marginTop: -f.size / 2 }}
             initial={{ scale: 1, opacity: 1, rotate: 0, left: `${f.left}%`, top: `${f.top}%` }}
             animate={{ scale: 0, opacity: 0, rotate: 24, left: "50%", top: "50%" }}
             transition={{ delay: 0.25 + f.delay, duration: 0.65, ease: easeOut }}

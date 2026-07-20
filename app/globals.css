@@ -2430,6 +2430,7 @@ button {
 .gopen-note {
   position: relative;
   width: min(84vw, 360px);
+  max-width: 100%;
   padding: 26px 22px;
   border-radius: 20px;
   border: 1.5px solid;
@@ -2438,6 +2439,8 @@ button {
     0 30px 60px -20px rgba(50, 30, 14, 0.45),
     inset 0 0 0 1px rgba(169, 130, 47, 0.25);
   text-align: center;
+  overflow-wrap: break-word;
+  word-break: break-word;
 }
 
 .gopen-note-title {
@@ -2494,7 +2497,7 @@ button {
   width: 220px;
   height: 96px;
   transform-origin: top center;
-  z-index: 3;
+  z-index: 2;
   filter: drop-shadow(0 6px 10px rgba(0, 0, 0, 0.4));
 }
 
@@ -2515,8 +2518,9 @@ button {
   position: absolute;
   left: 50%;
   top: 6px;
-  transform: translateX(-50%);
-  z-index: 2;
+  width: min(84vw, 360px);
+  margin-left: calc(min(84vw, 360px) / -2);
+  z-index: 3;
 }
 
 /* avion en papier */
@@ -2543,7 +2547,6 @@ button {
 
 .gopen-flower {
   position: absolute;
-  transform: translate(-50%, -50%);
 }
 
 /* carte qui brûle */
