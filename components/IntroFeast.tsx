@@ -2,8 +2,9 @@
 
 import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { ChapelOrnament } from "./icons";
-import RosePetals, { PotButtonContent, RoseSprig } from "./flowers";
+import { ChapelOrnament, GiftIcon } from "./icons";
+import GiftShower from "./GiftShower";
+import GiftTrigger from "./gift/GiftTrigger";
 
 const easeOut = [0.22, 1, 0.36, 1] as const;
 
@@ -69,29 +70,14 @@ function FeastCard({
   );
 }
 
-export default function IntroFeast({ onStart }: { onStart: () => void }) {
+export default function IntroFeast(_props: { onStart: () => void }) {
   const scrollRef = useRef<HTMLDivElement>(null);
-  const ctaRef = useRef<HTMLButtonElement>(null);
   const [zoomIndex, setZoomIndex] = useState<number | null>(null);
-  const [ctaVisible, setCtaVisible] = useState(false);
 
   const go = (dir: number) =>
     setZoomIndex((i) =>
       i === null ? i : (i + dir + PHOTOS.length) % PHOTOS.length,
     );
-
-  /* le bouton flotte tant que le vrai bouton (en bas) n'est pas à l'écran */
-  useEffect(() => {
-    const root = scrollRef.current;
-    const target = ctaRef.current;
-    if (!root || !target) return;
-    const io = new IntersectionObserver(
-      ([entry]) => setCtaVisible(entry.isIntersecting),
-      { root, threshold: 0.6 },
-    );
-    io.observe(target);
-    return () => io.disconnect();
-  }, []);
 
   /* navigation clavier dans le carrousel */
   useEffect(() => {
@@ -121,7 +107,7 @@ export default function IntroFeast({ onStart }: { onStart: () => void }) {
 
   return (
     <>
-    <RosePetals />
+    <GiftShower />
     <motion.section
       className="feast"
       ref={scrollRef}
@@ -145,12 +131,12 @@ export default function IntroFeast({ onStart }: { onStart: () => void }) {
         />
       </motion.div>
 
-      {/* fleurs décoratives de part et d'autre */}
+      {/* cadeaux décoratifs de part et d'autre */}
       <span className="feast-flora feast-flora--1" aria-hidden>
-        <RoseSprig size={104} />
+        <GiftIcon size={72} />
       </span>
       <span className="feast-flora feast-flora--2" aria-hidden>
-        <RoseSprig size={128} />
+        <GiftIcon size={88} />
       </span>
 
       <div className="feast-inner">
@@ -177,15 +163,19 @@ export default function IntroFeast({ onStart }: { onStart: () => void }) {
         </motion.p>
 
         <motion.div className="feast-cards" {...rise(0.46)}>
-          {PHOTOS.map((p, i) => (
-            <FeastCard
-              key={p.src}
-              photo={p}
-              index={i}
-              rot={ROTATIONS[i] ?? 0}
-              onOpen={setZoomIndex}
-            />
-          ))}
+          <div className="feast-cards-track">
+            {[0, 1].map((copy) =>
+              PHOTOS.map((p, i) => (
+                <FeastCard
+                  key={`${p.src}-${copy}`}
+                  photo={p}
+                  index={i}
+                  rot={ROTATIONS[i] ?? 0}
+                  onOpen={setZoomIndex}
+                />
+              )),
+            )}
+          </div>
         </motion.div>
 
         <div className="feast-text">
@@ -220,40 +210,13 @@ export default function IntroFeast({ onStart }: { onStart: () => void }) {
           Dieu vous bénisse
         </motion.p>
 
-        <motion.div className="feast-cta" {...inView(0.05)}>
-          <p className="feast-cta-lead">Et toi, cette semaine&nbsp;?</p>
-          <p className="feast-question">Quelle parole t’accompagne cette semaine&nbsp;?</p>
-          <p className="feast-question">Quel est ton défi de la semaine&nbsp;?</p>
-          <button
-            className="pot-btn"
-            ref={ctaRef}
-            onClick={onStart}
-            aria-label="Reçois ta pétale du jour"
-          >
-            <PotButtonContent />
-          </button>
-        </motion.div>
+        <motion.p className="feast-cta-lead" {...inView(0.05)}>
+          Envoie un cadeau à un frère ou une sœur
+        </motion.p>
       </div>
     </motion.section>
 
-    <div className="feast-float-wrap">
-      <AnimatePresence>
-        {!ctaVisible && zoomIndex === null && (
-          <motion.button
-            type="button"
-            className="pot-btn pot-btn--float"
-            onClick={onStart}
-            aria-label="Reçois ta pétale du jour"
-            initial={{ opacity: 0, y: 24 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 24 }}
-            transition={{ duration: 0.35, ease: easeOut }}
-          >
-            <PotButtonContent />
-          </motion.button>
-        )}
-      </AnimatePresence>
-    </div>
+    <GiftTrigger className="gift-trigger--inline" />
 
     <AnimatePresence>
       {zoomIndex !== null && (

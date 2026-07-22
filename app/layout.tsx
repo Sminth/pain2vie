@@ -16,25 +16,27 @@ const sans = Jost({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://thanksgiving-mont-sinai.vercel.app"),
   title: "Thanksgiving - Mont Sinaï 2026",
   description:
     "Romains 12:10 (Louis Segond, 1910) — « Par amour fraternel, soyez pleins d’affection les uns pour les autres. Par honneur, prévenez-vous les uns les autres. »",
   icons: {
-    icon: "/favicon.png",
-    shortcut: "/favicon.png",
-    apple: "/favicon.png",
+    icon: "/logo-mont-sinai.png",
+    shortcut: "/logo-mont-sinai.png",
+    apple: "/logo-mont-sinai.png",
   },
   openGraph: {
     title: "Thanksgiving - Mont Sinaï 2026",
     description:
       "Romains 12:10 (Louis Segond, 1910) — « Par amour fraternel, soyez pleins d’affection les uns pour les autres. Par honneur, prévenez-vous les uns les autres. »",
+    images: ["/logo-mont-sinai.png"],
     locale: "fr_FR",
     type: "website",
   },
 };
 
 export const viewport: Viewport = {
-  themeColor: "#f9f2e4",
+  themeColor: "#bfe0ef",
   width: "device-width",
   initialScale: 1,
   maximumScale: 1,

@@ -5,17 +5,16 @@ import { motion } from "framer-motion";
 
 const easeOut = [0.22, 1, 0.36, 1] as const;
 
-/* Boîte-cadeau animée, posée en flottant sur l'accueil : point d'entrée du
- * parcours « envoyer un cadeau » (thème → message → style d'envoi → lien). */
-export default function GiftTrigger() {
+/* Boîte-cadeau animée : point d'entrée du parcours « envoyer un cadeau »
+ * (thème → message → style d'envoi → lien). Réutilisable en flottant
+ * (coin de l'écran) ou en ligne (bouton dans la page, via `className`). */
+export default function GiftTrigger({ className = "" }: { className?: string }) {
   return (
-    <Link href="/cadeau" className="gift-trigger" aria-label="Envoyer un cadeau">
-      <motion.span
-        className="gift-trigger-glow"
-        animate={{ opacity: [0.35, 0.6, 0.35], scale: [0.92, 1.08, 0.92] }}
-        transition={{ duration: 3.2, repeat: Infinity, ease: "easeInOut" }}
-        aria-hidden
-      />
+    <Link
+      href="/cadeau"
+      className={`gift-trigger${className ? ` ${className}` : ""}`}
+      aria-label="Envoyer un cadeau"
+    >
       <motion.svg
         className="gift-trigger-box"
         viewBox="0 0 64 56"
@@ -26,23 +25,23 @@ export default function GiftTrigger() {
         animate={{ rotate: [-3, 3, -3], y: [0, -3, 0] }}
         transition={{ duration: 2.6, repeat: Infinity, ease: "easeInOut" }}
       >
-        <rect x="6" y="24" width="52" height="28" rx="3" fill="#c05b68" />
+        <rect x="6" y="24" width="52" height="28" rx="3" fill="#a13a24" />
         <rect x="6" y="24" width="52" height="28" rx="3" fill="url(#giftShade)" />
-        <rect x="27" y="24" width="10" height="28" fill="#8a2535" />
+        <rect x="27" y="24" width="10" height="28" fill="#6b2415" />
         <motion.g
           style={{ originX: "32px", originY: "18px" }}
           animate={{ rotate: [0, -6, 0, 4, 0] }}
           transition={{ duration: 2.6, repeat: Infinity, ease: "easeInOut", delay: 0.15 }}
         >
-          <rect x="3" y="14" width="58" height="11" rx="3" fill="#d4747f" />
-          <rect x="27" y="14" width="10" height="11" fill="#b8414e" />
+          <rect x="3" y="14" width="58" height="11" rx="3" fill="#c98a2e" />
+          <rect x="27" y="14" width="10" height="11" fill="#8f4f26" />
           <path
             d="M32 14C32 6 24 2 19 5c-4 2.4-2 9 13 9Z"
-            fill="#e7a9af"
+            fill="#e0ab52"
           />
           <path
             d="M32 14C32 6 40 2 45 5c4 2.4 2 9-13 9Z"
-            fill="#d4747f"
+            fill="#c98a2e"
           />
         </motion.g>
         <defs>

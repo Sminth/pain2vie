@@ -1,8 +1,8 @@
 :root {
   /* palette Mont Sinaï : or/ambré de la montagne, brun du texte "Mont",
    * rouge de la flamme — avec une touche de bleu du logo Sacerdoce Royal. */
-  --paper: #f9f2e4;
-  --paper-2: #f2e6cd;
+  --paper: #bfe0ef;
+  --paper-2: #a7cfe3;
   --card-face: #fdf9ef;
   --ink: #3d2b1f;
   --ink-soft: #7c6552;
@@ -139,6 +139,13 @@ button {
   box-shadow:
     0 20px 40px -12px rgba(72, 16, 25, 0.6),
     inset 0 1px 0 rgba(255, 255, 255, 0.18);
+}
+
+.feast-gift-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
 }
 
 .ghost {
@@ -934,7 +941,7 @@ button {
 .feast-inner {
   max-width: 600px;
   margin: 0 auto;
-  padding: clamp(46px, 8vh, 76px) 22px calc(46px + env(safe-area-inset-bottom));
+  padding: clamp(46px, 8vh, 76px) 22px calc(140px + env(safe-area-inset-bottom));
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -1009,14 +1016,31 @@ button {
 .feast-cards {
   width: 100%;
   margin: 34px 0 10px;
+  overflow: hidden;
+  padding: 8px 0 16px;
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
+  mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
+}
+
+.feast-cards-track {
   display: flex;
   align-items: flex-start;
   gap: clamp(10px, 3vw, 16px);
-  overflow-x: auto;
-  overflow-y: visible;
-  padding: 8px 4px 16px;
-  scroll-snap-type: x proximity;
-  -webkit-overflow-scrolling: touch;
+  width: max-content;
+  animation: feast-cards-scroll 32s linear infinite;
+}
+
+.feast-cards:hover .feast-cards-track {
+  animation-play-state: paused;
+}
+
+@keyframes feast-cards-scroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
 }
 
 .feast-card {
@@ -1034,7 +1058,6 @@ button {
   transform: rotate(var(--rot, 0deg));
   transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
   cursor: pointer;
-  scroll-snap-align: center;
   -webkit-tap-highlight-color: transparent;
 }
 
@@ -1550,6 +1573,7 @@ button {
   position: absolute;
   z-index: 0;
   opacity: 0.4;
+  color: var(--gold);
   pointer-events: none;
 }
 
@@ -1813,7 +1837,7 @@ button {
   position: absolute;
   inset: 4px 8px;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(192, 91, 104, 0.5), transparent 70%);
+  background: radial-gradient(circle, rgba(161, 58, 36, 0.45), transparent 70%);
   filter: blur(5px);
   z-index: -1;
 }
@@ -1831,6 +1855,34 @@ button {
   text-align: center;
   line-height: 1.2;
   text-shadow: 0 1px 0 rgba(255, 255, 255, 0.6);
+}
+
+/* variante « en ligne » : le même bouton animé, mais fixé en permanence en
+ * bas de l'écran — il reste visible pendant tout le défilement de la page. */
+.gift-trigger--inline {
+  position: fixed;
+  top: auto;
+  right: auto;
+  left: 50%;
+  bottom: max(16px, calc(env(safe-area-inset-bottom) + 10px));
+  transform: translateX(-50%);
+  width: auto;
+  z-index: 25;
+  padding: 6px 12px;
+}
+
+.gift-trigger--inline:hover {
+  transform: translateX(-50%) translateY(-2px);
+}
+
+.gift-trigger--inline .gift-trigger-box {
+  transform: scale(1.1);
+}
+
+.gift-trigger--inline .gift-trigger-label {
+  font-size: 0.82rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
 }
 
 .gift-close {

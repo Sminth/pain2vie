@@ -7,7 +7,6 @@ import { locateReference } from "@/data/bible";
 import BibleReveal from "./BibleReveal";
 import LightReveal from "./LightReveal";
 import IntroFeast from "./IntroFeast";
-import GiftTrigger from "./gift/GiftTrigger";
 
 const STORAGE_KEY = "saintete-famille-drawn";
 const TOTAL = CARDS.length;
@@ -50,7 +49,6 @@ export default function Experience() {
   return (
     <main className="stage">
       <div className="grain" />
-      <GiftTrigger />
       <AnimatePresence mode="wait">
         {phase === "intro" && <IntroFeast key="intro" onStart={() => draw()} />}
         {phase === "reveal" && card && (
