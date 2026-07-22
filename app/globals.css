@@ -1,15 +1,18 @@
 :root {
-  --paper: #f8f3e8;
-  --paper-2: #f1e8d4;
-  --card-face: #fdfaf2;
-  --ink: #43332b;
-  --ink-soft: #7a675c;
-  --wine: #6e1d2b;
-  --wine-deep: #481019;
-  --wine-ink: #5a1723;
-  --gold: #a9822f;
-  --gold-soft: #c9a659;
-  --gold-line: rgba(169, 130, 47, 0.45);
+  /* palette Mont Sinaï : or/ambré de la montagne, brun du texte "Mont",
+   * rouge de la flamme — avec une touche de bleu du logo Sacerdoce Royal. */
+  --paper: #f9f2e4;
+  --paper-2: #f2e6cd;
+  --card-face: #fdf9ef;
+  --ink: #3d2b1f;
+  --ink-soft: #7c6552;
+  --wine: #a13a24;
+  --wine-deep: #6b2415;
+  --wine-ink: #7a2e1c;
+  --gold: #c98a2e;
+  --gold-soft: #e0ab52;
+  --gold-line: rgba(190, 130, 40, 0.45);
+  --sr-blue: #2e93c9;
 }
 
 * {
@@ -906,15 +909,26 @@ button {
   -webkit-overflow-scrolling: touch;
 }
 
-.feast-logo {
+.feast-logos {
   position: fixed;
   top: max(12px, env(safe-area-inset-top));
   left: 14px;
   z-index: 8;
-  width: clamp(84px, 26vw, 120px);
-  height: auto;
-  filter: drop-shadow(0 4px 10px rgba(60, 40, 20, 0.18));
+  display: flex;
+  align-items: center;
+  gap: 8px;
   pointer-events: none;
+}
+
+.feast-logo {
+  width: clamp(84px, 26vw, 130px);
+  height: auto;
+  filter: drop-shadow(0 4px 10px rgba(60, 40, 20, 0.22));
+}
+
+.feast-logo--sr {
+  width: clamp(60px, 18vw, 92px);
+  border-radius: 12px;
 }
 
 .feast-inner {
@@ -932,10 +946,16 @@ button {
   margin-bottom: 12px;
 }
 
+.feast-ornament-logo {
+  width: clamp(90px, 26vw, 140px);
+  height: auto;
+  filter: drop-shadow(0 4px 10px rgba(60, 40, 20, 0.22));
+}
+
 .feast-tagline {
   margin-top: 10px;
   font-family: var(--font-serif), Georgia, serif;
-  font-size: 1.28rem;
+  font-size: 1.5rem;
   color: var(--wine-ink);
   letter-spacing: 0.02em;
 }
@@ -944,7 +964,7 @@ button {
   margin-top: 6px;
   font-family: var(--font-serif), Georgia, serif;
   font-style: italic;
-  font-size: 1.02rem;
+  font-size: 1.18rem;
   color: var(--gold);
 }
 
@@ -952,7 +972,7 @@ button {
   margin-top: 4px;
   font-family: var(--font-serif), Georgia, serif;
   font-style: italic;
-  font-size: 0.86rem;
+  font-size: 1.02rem;
   color: var(--ink-soft);
   text-wrap: balance;
 }
@@ -990,14 +1010,18 @@ button {
   width: 100%;
   margin: 34px 0 10px;
   display: flex;
-  justify-content: center;
   align-items: flex-start;
-  gap: clamp(8px, 3vw, 16px);
+  gap: clamp(10px, 3vw, 16px);
+  overflow-x: auto;
+  overflow-y: visible;
+  padding: 8px 4px 16px;
+  scroll-snap-type: x proximity;
+  -webkit-overflow-scrolling: touch;
 }
 
 .feast-card {
-  flex: 1 1 0;
-  max-width: 156px;
+  flex: 0 0 auto;
+  width: clamp(112px, 30vw, 152px);
   margin: 0;
   position: relative;
   aspect-ratio: 3 / 4;
@@ -1010,12 +1034,8 @@ button {
   transform: rotate(var(--rot, 0deg));
   transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
   cursor: pointer;
+  scroll-snap-align: center;
   -webkit-tap-highlight-color: transparent;
-}
-
-.feast-card:nth-child(2) {
-  transform: rotate(var(--rot, 0deg)) translateY(-8px);
-  z-index: 2;
 }
 
 .feast-card:hover {
@@ -1080,9 +1100,19 @@ button {
   margin-top: 18px;
 }
 
+.feast-blessing {
+  margin-top: 8px;
+  font-family: var(--font-serif), Georgia, serif;
+  font-style: italic;
+  font-weight: 500;
+  font-size: 1.55rem;
+  color: var(--gold);
+  text-wrap: balance;
+}
+
 .feast-text p {
   font-family: var(--font-serif), Georgia, serif;
-  font-size: 1.02rem;
+  font-size: 1.18rem;
   line-height: 1.75;
   color: var(--ink-soft);
   margin-bottom: 16px;
@@ -1767,8 +1797,8 @@ button {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 4px;
-  width: 92px;
+  gap: 5px;
+  width: 112px;
   padding: 10px 6px 8px;
   text-decoration: none;
   border-radius: 18px;
@@ -1794,7 +1824,7 @@ button {
 }
 
 .gift-trigger-label {
-  font-size: 0.64rem;
+  font-size: 0.76rem;
   letter-spacing: 0.03em;
   font-weight: 700;
   color: var(--wine-ink);

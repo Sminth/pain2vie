@@ -9,12 +9,19 @@ const easeOut = [0.22, 1, 0.36, 1] as const;
 
 type Photo = { src: string; alt: string; caption: string };
 
-const PHOTOS = [
-  { src: "/martin/image.png", alt: "Les saints Louis et Zélie Martin", caption: "Louis & Zélie" },
-  { src: "/martin/image1.png", alt: "La famille Martin", caption: "La famille Martin" },
-  { src: "/martin/image2.png", alt: "Louis, sainte Thérèse et Zélie", caption: "Avec Thérèse" },
-  { src: "/martin/image3.png", alt: "Louis, sainte Thérèse et Zélie", caption: "Avec Thérèse" },
+const PHOTOS: Photo[] = [
+  { src: "/congres-1.jpeg", alt: "Fraternité au congrès Mont Sinaï", caption: "Fraternité" },
+  { src: "/congres-2.jpeg", alt: "Louange au congrès Mont Sinaï", caption: "Louange" },
+  { src: "/congres-3.jpeg", alt: "Communion fraternelle", caption: "Communion" },
+  { src: "/congres-4.jpeg", alt: "Action de grâce au congrès", caption: "Action de grâce" },
+  { src: "/congres-5.jpeg", alt: "Consécration pour le service", caption: "Consécration" },
+  { src: "/congres-6.jpeg", alt: "Joie partagée entre frères et sœurs", caption: "Joie partagée" },
+  { src: "/congres-7.jpeg", alt: "Vie de mission de la Fraternité", caption: "Vie de mission" },
+  { src: "/congres-8.jpeg", alt: "Grâce et service", caption: "Grâce et service" },
+  { src: "/congres-9.jpeg", alt: "Mont Sinaï 2026", caption: "Mont Sinaï 2026" },
 ];
+
+const ROTATIONS = [-4, 3, -2, 4, -3, 2, -4, 3, -2];
 
 /* Carte-photo cliquable (agrandissement) avec repli si le fichier manque. */
 function FeastCard({
@@ -61,23 +68,6 @@ function FeastCard({
     </figure>
   );
 }
-
-const PARAGRAPHS = [
-  "L’histoire du couple de Louis et Zélie est une histoire simple mais pas ordinaire pour autant.",
-  "Si Louis a eu l’habitude des voyages, au gré des mutations de son papa militaire, de garnison en garnison, Zélie, quoique fille de militaire aussi — son papa était gendarme — n’a pratiquement pas voyagé, se déplaçant tout juste de quelques dizaines de kilomètres pour rallier Alençon à l’âge de 13 ans.",
-  "Leur histoire est originale. Désirant, l’un comme l’autre, devenir religieux, éconduits chacun pour leur part dans leur démarche, rendus à leur solitude de vie dans cette ville calme et paisible d’Alençon, ils se rencontrent sur le pont qui enjambe la Sarthe et se marient quelques mois plus tard.",
-  "Homme et femme de foi, travailleurs, bons éducateurs de leurs enfants (ils en auront neuf), engagés dans les œuvres sociales, soucieux de témoigner de leur foi, éprouvés par la maladie de Zélie, ils ne laissent personne indifférent.",
-  "Dix-neuf années d’un réel bonheur vécu comme époux et en famille, puis dix-sept années où la famille Martin, transplantée à Lisieux, vivra dans le souvenir de leur épouse et mère regrettée.",
-  "Aujourd’hui, l’Église nous les offre comme modèles sur le chemin de la Sainteté parce qu’ils ont su, dans l’épreuve qui était la leur, « vivre d’Amour », pour reprendre le titre d’une poésie de leur fille sainte Thérèse.",
-];
-
-const POINTS = [
-  "Désirant d’abord la vie religieuse, Louis Martin et Zélie Guérin se marient finalement en 1858 à Alençon.",
-  "Entrepreneurs prospères, ils fondent une famille profondément chrétienne et axée sur la charité.",
-  "Le couple traverse de douloureuses épreuves, perdant quatre de leurs neuf enfants en bas âge.",
-  "Après la mort précoce de Zélie d’un cancer, Louis déménage à Lisieux pour élever leurs cinq filles, qui deviendront toutes religieuses, dont la future sainte Thérèse.",
-  "Frappé par la maladie en fin de vie, Louis s’éteint en 1894, laissant le souvenir d’un couple exemplaire, canonisé en 2015.",
-];
 
 export default function IntroFeast({ onStart }: { onStart: () => void }) {
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -140,15 +130,20 @@ export default function IntroFeast({ onStart }: { onStart: () => void }) {
       exit={{ opacity: 0, filter: "blur(8px)" }}
       transition={{ duration: 0.5, ease: easeOut }}
     >
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <motion.img
-        className="feast-logo"
-        src="/logo.png"
-        alt="Joseph d’Arimathée du Sacerdoce Royal"
+      <motion.div
+        className="feast-logos"
         initial={{ opacity: 0, y: -10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.7, delay: 0.1, ease: easeOut }}
-      />
+      >
+        <motion.img
+          className="feast-logo feast-logo--sr"
+          src="/logo-sr.png"
+          alt="Sacerdoce Royal"
+          animate={{ y: [0, -4, 0] }}
+          transition={{ duration: 3.6, repeat: Infinity, ease: "easeInOut", delay: 0.4 }}
+        />
+      </motion.div>
 
       {/* fleurs décoratives de part et d'autre */}
       <span className="feast-flora feast-flora--1" aria-hidden>
@@ -160,19 +155,25 @@ export default function IntroFeast({ onStart }: { onStart: () => void }) {
 
       <div className="feast-inner">
         <motion.div className="feast-ornament" {...rise(0.15)}>
-          <ChapelOrnament size={46} />
+          <motion.img
+            className="feast-ornament-logo"
+            src="/logo-mont-sinai.png"
+            alt="Mont Sinaï"
+            animate={{ y: [0, -5, 0] }}
+            transition={{ duration: 3.6, repeat: Infinity, ease: "easeInOut" }}
+          />
         </motion.div>
         <motion.p className="eyebrow" {...rise(0.26)}>
-          Fête des saints Louis &amp; Zélie Martin
+          Mont Sinaï 2026
         </motion.p>
         <motion.p className="feast-tagline" {...rise(0.32)}>
-          Couple missionnaire
+          Cérémonie de Thanksgiving
         </motion.p>
         <motion.p className="feast-date" {...rise(0.4)}>
-          Dimanche 12 juillet 2026
+          12ᵉ congrès annuel
         </motion.p>
         <motion.p className="feast-note" {...rise(0.46)}>
-          Jour anniversaire de leur mariage&nbsp;(12 juillet 1858)
+          Congrès de la loyauté et de la fidélité
         </motion.p>
 
         <motion.div className="feast-cards" {...rise(0.46)}>
@@ -181,32 +182,43 @@ export default function IntroFeast({ onStart }: { onStart: () => void }) {
               key={p.src}
               photo={p}
               index={i}
-              rot={[-5, -1.5, 2, 5][i] ?? 0}
+              rot={ROTATIONS[i] ?? 0}
               onOpen={setZoomIndex}
             />
           ))}
         </motion.div>
 
-        <motion.h1 className="feast-title" {...rise(0.6)}>
-          La sainteté commence à la maison
+        <div className="feast-text">
+          <motion.p {...inView(0)}>
+            Bien plus qu’une clôture, la Cérémonie de Thanksgiving est un rendez-vous de
+            gratitude, de reconnaissance et de communion fraternelle. Elle offre à chaque
+            participant l’occasion de rendre grâce à Dieu, de célébrer les liens tissés
+            durant le Mont Sinaï et d’honorer les frères et sœurs qui ont marqué son chemin.
+          </motion.p>
+        </div>
+
+        <motion.h1 className="feast-title" {...inView(0.05)}>
+          Innovation 2026 : la Plateforme de Gratitude
         </motion.h1>
 
         <div className="feast-text">
-          {PARAGRAPHS.map((p, i) => (
-            <motion.p key={i} {...inView(0)}>
-              {p}
-            </motion.p>
-          ))}
+          <motion.p {...inView(0)}>
+            En amont de la cérémonie, chaque participant pourra envoyer des messages
+            personnalisés de remerciement, d’encouragement ou de bénédiction à un ou
+            plusieurs membres de la Fraternité. Ces messages seront remis de manière
+            personnalisée pendant la cérémonie, transformant chaque geste en une expérience
+            profondément humaine, spirituelle et mémorable.
+          </motion.p>
+          <motion.p {...inView(0.1)}>
+            Parce que les mots ont le pouvoir d’encourager, d’édifier et de laisser une
+            empreinte durable, cette initiative fera de la gratitude un héritage que chacun
+            emportera avec lui en repartant du Mont Sinaï.
+          </motion.p>
         </div>
 
-        <motion.div className="feast-points-wrap" {...inView(0)}>
-          <p className="feast-points-title">En resumé</p>
-          <ul className="feast-points">
-            {POINTS.map((p, i) => (
-              <li key={i}>{p}</li>
-            ))}
-          </ul>
-        </motion.div>
+        <motion.p className="feast-blessing" {...inView(0.05)}>
+          Dieu vous bénisse
+        </motion.p>
 
         <motion.div className="feast-cta" {...inView(0.05)}>
           <p className="feast-cta-lead">Et toi, cette semaine&nbsp;?</p>

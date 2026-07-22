@@ -19,8 +19,8 @@ export default function GiftTrigger() {
       <motion.svg
         className="gift-trigger-box"
         viewBox="0 0 64 56"
-        width="60"
-        height="52"
+        width="76"
+        height="66"
         aria-hidden
         initial={{ rotate: -3 }}
         animate={{ rotate: [-3, 3, -3], y: [0, -3, 0] }}

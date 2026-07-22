@@ -16,25 +16,25 @@ const sans = Jost({
 });
 
 export const metadata: Metadata = {
-  title: "La sainteté commence à la maison — Louis & Zélie Martin",
+  title: "Thanksgiving - Mont Sinaï 2026",
   description:
-    "Fête des saints Louis et Zélie Martin. Reçois une parole à méditer et un défi spirituel à vivre en famille.",
+    "Romains 12:10 (Louis Segond, 1910) — « Par amour fraternel, soyez pleins d’affection les uns pour les autres. Par honneur, prévenez-vous les uns les autres. »",
   icons: {
     icon: "/favicon.png",
     shortcut: "/favicon.png",
     apple: "/favicon.png",
   },
   openGraph: {
-    title: "La sainteté commence à la maison",
+    title: "Thanksgiving - Mont Sinaï 2026",
     description:
-      "Une parole à méditer, un défi à vivre en famille. Fête des saints Louis et Zélie Martin.",
+      "Romains 12:10 (Louis Segond, 1910) — « Par amour fraternel, soyez pleins d’affection les uns pour les autres. Par honneur, prévenez-vous les uns les autres. »",
     locale: "fr_FR",
     type: "website",
   },
 };
 
 export const viewport: Viewport = {
-  themeColor: "#f8f3e8",
+  themeColor: "#f9f2e4",
   width: "device-width",
   initialScale: 1,
   maximumScale: 1,
