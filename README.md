@@ -32,4 +32,4 @@ aucun réglage nécessaire.
 Tout le contenu est dans [`data/cards.ts`](data/cards.ts) :
 `quote` (recto), `reference`, `challenge` (verso), `icon`
 (`flame`, `house`, `heart`, `dove`, `book`, `cross`).
-# Thanksgiving-Mont Sina
+# Thanksgiving-Mont Sinaï
