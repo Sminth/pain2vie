@@ -78,7 +78,7 @@ export default function GiftCompose() {
     return `${window.location.origin}/cadeau?g=${payload}`;
   }, [theme, styleId, message]);
 
-  const shareText = "Je t'ai envoyé un magnifique cadeau, clique sur le lien pour le voir 🎁";
+  const shareText = "Accueille et reçois ces mots de gratitude et de bienveillance. Que Dieu te bénisse. Clique sur le lien ci-dessous pour les découvrir.🎁";
 
   const handleShare = async () => {
     if (busy || !link) return;
